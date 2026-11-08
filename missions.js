@@ -41,10 +41,10 @@ const lab = [
 
 const cases = ['Nominativ','Akkusativ','Dativ','Genitiv'];
 const cargo = [
- ['Was führt hinter den Vorhang?','ein','schmal','Radspur',0,'eine','e','Radspur','Das Subjekt steht im Nominativ. Nach «eine» lautet die Endung hier -e.'],
- ['Was untersucht Ada?','der','schwer','Koffer',1,'den','en','Koffer','«Untersuchen» hat hier ein Akkusativobjekt. Maskulin wird «der» zu «den».'],
- ['Wem folgt das Kind?','der','klein','Roboter',2,'dem','en','Roboter','«Folgen» verlangt den Dativ. Nach «dem» steht die Endung -en.'],
- ['Wessen Siegel ist gebrochen?','der','alt','Container',3,'des','en','Containers','Maskuline Nomen erhalten im Genitiv Singular häufig -s oder -es. Hier lautet die Form «Containers».'],
+ ['Wer oder was stiess die Kette an?','die','rot','Kugel',0,'die','e','Kugel','Das Subjekt nennt den Auslöser und steht im Nominativ.','Die rote Kugel stiess die Kette an.'],
+ ['Wen oder was kippte die Kugel um?','der','leicht','Becher',1,'den','en','Becher','Das Akkusativobjekt bezeichnet hier den Gegenstand, auf den die Kugel einwirkte.','Die Kugel kippte den leichten Becher um. Der Becher setzte die Dominosteine in Bewegung.'],
+ ['Wem versetzten die Dominosteine einen Stoss?','der','klein','Wagen',2,'dem','en','Wagen','Bei «jemandem einen Stoss versetzen» steht das Ziel des Stosses im Dativ.','Die Dominosteine versetzten dem kleinen Wagen einen Stoss. Seine Radspur führt hinter den Vorhang.'],
+ ['Wessen Inhalt zeigt das letzte Foto vor dem Klappern?','der','klein','Wagen',3,'des','en','Wagens','Der Genitiv zeigt, zu welchem Gegenstand der Inhalt gehört.','Der Inhalt des kleinen Wagens war der Pokal. Auf dem Foto steht er auf der Ladefläche.'],
  ['Wer nimmt die Bilder auf?','die','neu','Kamera',0,'die','e','Kamera','Feminines Nominativsubjekt mit bestimmtem Artikel: «die neue Kamera».'],
  ['Was repariert die Crew?','ein','defekt','Ventil',1,'ein','es','Ventil','Neutrum im Akkusativ nach «ein»: Das Adjektiv bekommt -es.'],
  ['Wem hilft der Pilot? (Plural)','die','jung','Techniker',2,'den','en','Technikern','«Helfen» verlangt den Dativ. Im Dativ Plural erhält «Techniker» ein zusätzliches -n.'],
@@ -53,11 +53,11 @@ const cargo = [
  ['Was dient als Treibstoff?','ohne Artikel','kalt','Gas',0,'—','es','Gas','Ohne Artikel trägt das Adjektiv im Nominativ Neutrum die starke Endung -es.'],
  ['Wem gilt der Dank?','kein','müde','Ärztin',2,'keiner','en','Ärztin','Femininer Dativ mit «kein»: «keiner müden Ärztin».'],
  ['Was benötigt das Labor? (Plural)','ohne Artikel','neu','Filter',1,'—','e','Filter','Ohne Artikel trägt das Adjektiv im Akkusativ Plural die Endung -e.']
-].map(([title, article, stem, noun, k, det, end, flex, hint]) => {
+].map(([title, article, stem, noun, k, det, end, flex, hint, clue]) => {
  const determinants = {'der':['der','den','dem','des'],'die':['die','der','den','denen'],'ein':['ein','eine','einen','einem'],'kein':['keine','keiner','keinem','keinen'],'ohne Artikel':['—']}[article];
  const nouns = [...new Set([noun,flex,noun+'n',noun+'s'])];
  const endings = ['e','en','er','es','em'];
- return {title,brief:'Beantworte die Frage mit dieser Wortgruppe. Wähle Kasus, Begleiter, Adjektivendung und Nomen. Grundform: '+[article,stem,noun].join(' · '),hint,stem,
+ return {title,brief:'Beantworte die Frage mit dieser Wortgruppe. Wähle Kasus, Begleiter, Adjektivendung und Nomen. Grundform: '+[article,stem,noun].join(' · '),hint,stem,clue,
  fields:[['Welcher Fall beantwortet die Frage?',cases],['Begleiter',determinants],['Endung',endings],['Nomen',nouns]],answer:[k,determinants.indexOf(det),endings.indexOf(end),nouns.indexOf(flex)]};
 });
 

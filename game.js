@@ -1,8 +1,8 @@
 const get = id => document.getElementById(id);
-const key = 'satzsprung-krimi-v1';
+const key = 'satzsprung-krimi-v2';
 let solved = new Set();
 try {
- const saved = JSON.parse(localStorage.getItem(key) || '[]');
+ const saved = JSON.parse(localStorage.getItem(key) || JSON.stringify(JSON.parse(localStorage.getItem('satzsprung-krimi-v1') || '[]').filter(id => !/^2\/[0-3]$/.test(id))));
  if (Array.isArray(saved)) solved = new Set(saved.filter(id => stations.some((s, i) => s.missions.some((_, j) => id === i + '/' + j))));
 } catch {}
 const total = stations.reduce((sum,s) => sum + s.missions.length,0);
@@ -12,12 +12,9 @@ const places = [
  ['seite','Lampe neben dem Tisch',83,16],['lücke','Zwischen den Dominosteinen',83,47],
  ['vor','Vor dem Tisch',17,80],['unten','Unter dem Tisch',50,80],['hinten','Hinter dem Tisch',83,80]
 ];
-const clues = [
- 'Aufnahme: Die Kugel kippt den Becher um.',
- 'Ada sah den Pokal auf dem Wagen.',
- 'Wer oder was führt hinter den Vorhang? Eine schmale Radspur.',
- 'Aufbau: Becher und Dominosteine bilden eine Reihe bis zum Wagen.'
-];
+const clues = cargo.filter(m => m.clue);
+const clueId = i => '2/'+i;
+const allClues = () => clues.every((_,i) => solved.has(clueId(i)));
 let station = 0, index = 0, selected = [], spot = '', locked = false;
 const mission = () => stations[station].missions[index];
 const id = () => station + '/' + index;
@@ -53,10 +50,10 @@ function nav() {
  }));
  get('clues').replaceChildren(...clues.map((clue,i) => {
   const item = document.createElement('li');
-  item.textContent = solved.has(i+'/0') ? clue : 'Hinweis '+(i+1)+' fehlt';
+  item.textContent = cases[i]+' · '+(solved.has(clueId(i)) ? clue.clue : 'Spur fehlt');
   return item;
  }));
- get('verdict').disabled = !clues.every((_,i) => solved.has(i+'/0'));
+ get('verdict').disabled = !allClues();
  get('progress').textContent = solved.size+' / '+total+' AUFGABEN GELÖST';
 }
 
@@ -186,25 +183,23 @@ function check() {
  try { localStorage.setItem(key,JSON.stringify([...solved])); } catch {}
  nav();
  if (m.spot) get('scene-caption').textContent = m.result;
- feedback('Richtig. '+m.hint,'good');
+ feedback('Richtig. '+m.hint+(m.clue ? ' Spur gesichert: '+m.clue : ''),'good');
  get('check').hidden = get('hint').hidden = true;
  get('next').hidden = false;
- if (index===0 && !get('verdict').disabled) get('next').textContent = 'Zum Fallabschluss →';
+ if (m.clue && allClues()) get('next').textContent = 'Zum Fallabschluss →';
  get('controls').querySelectorAll('button').forEach(item => item.disabled = true);
  get('scenery').querySelectorAll('button').forEach(item => item.disabled = true);
  get('next').focus();
 }
 
 function advance() {
- if (index===0 && !get('verdict').disabled && get('next').textContent==='Zum Fallabschluss →') {
+ if (mission().clue && allClues() && get('next').textContent==='Zum Fallabschluss →') {
   showCase();
   get('next').textContent = 'Weiter →';
   return;
  }
  const pending = stations[station].missions.findIndex((_,j) => j > index && !solved.has(station+'/'+j));
- if (index===0 && !solved.has(((station+1)%4)+'/0')) {
-  openStation((station+1)%4);
- } else if (pending >= 0) {
+ if (pending >= 0) {
   index = pending;
   render();
  } else {
@@ -224,24 +219,43 @@ function playRecording(reconstruct) {
 }
 
 function showCase() {
+ if (!allClues()) return;
  const resolution = get('resolution');
  resolution.textContent = '';
- get('deduction').replaceChildren(...[
-  'Ada hat den Pokal weggetragen.',
-  'Der Wagen ist hinter den Vorhang gerollt.',
-  'Noah hat den Pokal in die Schachtel gelegt.'
- ].map((answer,i) => button(answer, () => {
-  if (i !== 1) {
-   resolution.textContent = 'Schau noch einmal auf die Radspuren und Adas Aussage.';
+ const steps = [
+  ['Nominativ · Was löste die Kette aus?', ['Die Tür','Die rote Kugel','Der Vorhang'], 1],
+  ['Akkusativ · Was traf der Auslöser?', ['Den leichten Becher','Den Pokal','Den Wagen'], 0],
+  ['Dativ · Wem versetzten die Dominosteine einen Stoss?', ['Dem Tisch','Dem Becher','Dem kleinen Wagen'], 2],
+  ['Genitiv · Wessen Ladung verschwand hinter dem Vorhang?', ['Die Ladung des Tisches','Die Ladung des kleinen Wagens','Die Ladung des Bechers'], 1]
+ ];
+ get('deduction').replaceChildren();
+ const selectors = steps.map(([question,options],i) => {
+  const field = document.createElement('label');
+  const select = document.createElement('select');
+  field.textContent = question;
+  for (const option of ['Bitte wählen',...options]) {
+   const choice = document.createElement('option');
+   choice.textContent = option;
+   select.append(choice);
+  }
+  const note = document.createElement('small');
+  note.textContent = clues[i].clue;
+  field.append(select,note);
+  get('deduction').append(field);
+  return select;
+ });
+ get('deduction').append(button('Ablauf prüfen', () => {
+  if (selectors.some((select,i) => select.selectedIndex !== steps[i][2]+1)) {
+   resolution.textContent = 'Der Ablauf passt noch nicht zu allen vier Spuren. Vergleiche jede Auswahl mit der Spur darunter.';
    return;
   }
   get('case-file').close();
   openStation(0);
-  get('scene-caption').textContent = 'Fall gelöst. Die Kugel kippte den Becher um. Die Dominosteine stiessen den Wagen an. Der Pokal steht hinter dem Vorhang.';
+  get('scene-caption').textContent = 'Fall gelöst. Die Kugel kippte den Becher um. Der Becher setzte die Dominosteine in Bewegung. Sie stiessen den Wagen an, der mit dem Pokal hinter den Vorhang rollte.';
   playRecording(true);
   get('replay').onclick = () => playRecording(true);
   get('replay').focus();
- })));
+ }, 'primary'));
  get('case-file').showModal();
 }
 
@@ -270,5 +284,4 @@ document.addEventListener('keydown',event => {
   if (locked) advance(); else check();
  }
 });
-const start = stations.findIndex((_,i) => !solved.has(i+'/0'));
-openStation(Math.max(0,start));
+openStation(2);

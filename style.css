@@ -66,3 +66,7 @@ dialog::backdrop{background:#000a}.close{float:right}
  *,*::before,*::after{transition:none!important;animation-duration:1ms!important;animation-delay:0ms!important}
 }
 @media(max-width:850px){.layout:has(.station-3) #source{display:none}}
+#deduction{display:grid}
+#deduction label{display:grid;gap:5px}
+#deduction select{width:100%;min-height:44px;background:#40312b;color:inherit;border:1px solid var(--line);border-radius:7px;padding:5px 8px;font:inherit}
+#deduction small{color:var(--muted)}
