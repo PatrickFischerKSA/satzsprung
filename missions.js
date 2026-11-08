@@ -55,14 +55,45 @@ const cargo = [
  ['Was benötigt das Labor? (Plural)','ohne Artikel','neu','Filter',1,'—','e','Filter','Ohne Artikel trägt das Adjektiv im Akkusativ Plural die Endung -e.']
 ].map(([title, article, stem, noun, k, det, end, flex, hint, clue]) => {
  if (clue) {
-  const phrases = [
-   ['die rote Kugel','der roten Kugel','den roten Kugeln'],
-   ['dem leichten Becher','den leichten Becher','der leichte Becher'],
-   ['den kleinen Wagen','des kleinen Wagens','dem kleinen Wagen'],
-   ['des kleinen Wagens','der kleine Wagen','dem kleinen Wagen']
+  const reports = [
+   {
+    title:'Der Auslöser',sample:'Den leichten Becher stiess vor dem Klappern die rote Kugel an.',
+    brief:'Isoliere die Wortgruppe, die den Auslöser nennt. Bestimme ihren Kasus und begründe ihn.',
+    phrases:['den leichten Becher','vor dem Klappern','die rote Kugel'],
+    reasons:['Die Wortgruppe steht am Satzanfang.','Das Verb steht in der Einzahl und richtet sich nach dieser Wortgruppe.','Die Präposition «vor» verlangt hier den Dativ.'],
+    pick:2,reason:1,
+    explanation:'«Die rote Kugel» ist das Subjekt. Bei «die roten Kugeln» müsste es «stiessen» heissen. Die erste Wortgruppe ist hier das Akkusativobjekt.'
+   },
+   {
+    title:'Das erste Hindernis',sample:'Die rote Kugel kippte das leichte Trinkgefäss um.',
+    brief:'Wähle die Wortgruppe für den Gegenstand, der umkippte. Bestimme ihren Kasus und prüfe ihn mit einer Ersatzprobe.',
+    phrases:['die rote Kugel','das leichte Trinkgefäss','im Protokoll'],
+    reasons:['Mit einem maskulinen Nomen lautet die Wortgruppe «der leichte Becher».','Der Artikel «das» zeigt eindeutig den Nominativ.','Mit einem maskulinen Nomen lautet die Wortgruppe «den leichten Becher».'],
+    pick:1,reason:2,
+    explanation:'«Die leichte Tasse» könnte der Form nach auch Nominativ sein. Die Ersatzprobe «den leichten Becher» macht den Akkusativ sichtbar.'
+   },
+   {
+    title:'Die Richtung des Stosses',sample:'Hinter dem Tisch versetzten die Dominosteine dem kleinen Wagen einen Stoss.',
+    brief:'Wähle die Wortgruppe für das Ziel des Stosses. Bestimme ihren Kasus und unterscheide sie von der Ortsangabe.',
+    phrases:['dem kleinen Wagen','hinter dem Tisch','einen Stoss'],
+    reasons:['«Jemandem einen Stoss versetzen» verlangt für das Ziel ein Dativobjekt.','«Hinter» verlangt hier den Dativ für den Ort.','«Einen» zeigt den maskulinen Akkusativ an.'],
+    pick:0,reason:0,
+    explanation:'«Dem kleinen Wagen» ist ein Dativobjekt. «Hinter dem Tisch» enthält ebenfalls einen Dativ, gibt aber den Ort an.'
+   },
+   {
+    title:'Die Ladung im Foto',sample:'Neben der Tür lag ein Foto der Ladefläche. Darauf sah man den Inhalt des kleinen Wagens.',
+    brief:'Wähle die Wortgruppe, die angibt, zu welchem Gegenstand der Inhalt gehörte. Bestimme ihren Kasus und ihre Funktion.',
+    phrases:['neben der Tür','der Ladefläche','des kleinen Wagens'],
+    reasons:['Sie hängt von «Foto» ab und benennt dessen Motiv.','Sie hängt vom Nomen «Inhalt» ab und gibt an, wozu der Inhalt gehört.','Sie hängt unmittelbar vom Verb «sah» ab.'],
+    pick:2,reason:1,
+    explanation:'«Des kleinen Wagens» ist ein Genitivattribut zu «Inhalt». «Der Ladefläche» ist ebenfalls ein Genitivattribut, gehört aber zu «Foto».'
+   }
   ];
-  return {title,brief:'Wähle den Fall und die passende Wortgruppe.',hint,clue,
-   fields:[['1 · Fall',cases],['2 · Wortgruppe',phrases[k]]],answer:[k,[0,1,2,0][k]]};
+  const report = reports[k];
+  return {title:report.title,sample:report.sample,brief:report.brief,hint:report.explanation,clue,
+   fields:[['1 · Wortgruppe',report.phrases],['2 · Kasus',cases],['3 · Begründung',report.reasons]],
+   answer:[report.pick,k,report.reason]};
+
  }
  const determinants = {'der':['der','den','dem','des'],'die':['die','der','den','denen'],'ein':['ein','eine','einen','einem'],'kein':['keine','keiner','keinem','keinen'],'ohne Artikel':['—']}[article];
  const nouns = [...new Set([noun,flex,noun+'n',noun+'s'])];

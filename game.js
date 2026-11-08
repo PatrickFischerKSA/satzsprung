@@ -1,9 +1,13 @@
 const get = id => document.getElementById(id);
-const key = 'satzsprung-krimi-v2';
+const key = 'satzsprung-krimi-v3';
 let solved = new Set();
 try {
- const saved = JSON.parse(localStorage.getItem(key) || JSON.stringify(JSON.parse(localStorage.getItem('satzsprung-krimi-v1') || '[]').filter(id => !/^2\/[0-3]$/.test(id))));
- if (Array.isArray(saved)) solved = new Set(saved.filter(id => stations.some((s, i) => s.missions.some((_, j) => id === i + '/' + j))));
+ const current = localStorage.getItem(key);
+ const saved = JSON.parse(current ?? localStorage.getItem('satzsprung-krimi-v2') ?? localStorage.getItem('satzsprung-krimi-v1') ?? '[]');
+ if (Array.isArray(saved)) solved = new Set(saved.filter(id =>
+  (current !== null || !/^2\/[0-3]$/.test(id)) &&
+  stations.some((s,i) => s.missions.some((_,j) => id === i+'/'+j))
+ ));
 } catch {}
 const total = stations.reduce((sum,s) => sum + s.missions.length,0);
 const places = [
@@ -84,6 +88,7 @@ function showCrimeScene() {
  index = 0;
  render();
  get('mission-title').textContent = 'Untersuche den Tatort';
+ get('source').hidden = true;
  get('brief').textContent = 'Untersuche das Bild mit der Lupe. Bei einem Fund öffnet sich die passende Aufgabe.';
  get('controls').replaceChildren();
  get('check').hidden = get('hint').hidden = true;
@@ -243,7 +248,7 @@ function caption() {
  const display = [
   () => forms[selected[0]]?.[selected[1]] || 'Wähle Perspektive und Zeitstufe.',
   () => words[0] ? m.sample + '  →  ' + words[0] : m.sample,
-  () => m.clue ? words[1] || 'Deine Wortgruppe erscheint hier.' : [words[1] === '—' ? '' : words[1],m.stem+(words[2] || '…'),words[3]].filter(Boolean).join(' '),
+  () => m.clue ? words[0] || 'Deine Wortgruppe erscheint hier.' : [words[1] === '—' ? '' : words[1],m.stem+(words[2] || '…'),words[3]].filter(Boolean).join(' '),
   () => (places.find(([value]) => value===spot)?.[1] || 'Wähle ein Feld auf der Karte.') + (words[0] && words[1] ? ' · '+words.join(' / ') : '')
  ,() => words.every(Boolean) ? m.sentence(words) : 'Wähle eine Verbform und ein Bindewort.'
  ][station]();
