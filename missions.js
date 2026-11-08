@@ -57,8 +57,8 @@ const cargo = [
  if (clue) {
   const reports = [
    {
-    title:'Der Auslöser',sample:'Den leichten Becher stiess vor dem Klappern die rote Kugel an.',
-    brief:'Isoliere die Wortgruppe, die den Auslöser nennt. Bestimme ihren Kasus und begründe ihn.',
+    title:'Der Stoss gegen den Becher',sample:'Den leichten Becher stiess vor dem Klappern die rote Kugel an.',
+    brief:'Welche Wortgruppe nennt das, was den Becher anstösst? Bestimme ihren Kasus und begründe deine Wahl.',
     phrases:['den leichten Becher','vor dem Klappern','die rote Kugel'],
     reasons:['Die Wortgruppe steht am Satzanfang.','Das Verb steht in der Einzahl und richtet sich nach dieser Wortgruppe.','Die Präposition «vor» verlangt hier den Dativ.'],
     pick:2,reason:1,
