@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111820">
+<title>Satzsprung · Grammatik gegen die Schwerkraft</title>
+<link rel="stylesheet" href="style.css">
+<script defer src="missions.js"></script><script defer src="game.js"></script>
+</head>
+<body>
+<div class="shell">
+<header><a href="./" class="brand"><b>↯</b> SATZSPRUNG</a><button id="manual">Bordbuch</button></header>
+<main>
+<div class="eyebrow">FLUGPROTOKOLL / S-07</div>
+<h1>Grammatik gegen<br>die <em>Schwerkraft.</em></h1>
+<p class="intro">Die Station zerfällt. Verschiebe die Zeit, drehe die Perspektive und bring die Fracht zum Fluchtschiff.</p>
+<nav aria-label="Stationen" id="stations"></nav>
+<div class="layout">
+<section class="viewport" aria-label="Beobachtungsfenster">
+<div class="hud"><span id="scene-label"></span><span id="counter"></span></div>
+<p id="route-brief" tabindex="-1" hidden></p>
+<div class="stars"></div>
+<div class="planet"></div>
+<div id="scene"><div class="orbit"></div><div id="ship" aria-hidden="true"><svg viewBox="0 0 160 100"><path d="M45 28 19 9 21 37 0 50 21 63 19 91 45 72 111 72 156 50 111 28Z" fill="#b8ff78" stroke="#0e2117" stroke-width="4"/><path d="M48 37h62l23 13-23 13H48z" fill="#243f39"/><path d="M30 44h13v12H30z" fill="#fff9c5"/></svg></div><div id="scenery"></div></div>
+<div id="scene-caption"></div>
+</section>
+<section class="console" aria-labelledby="mission-title">
+<div class="eyebrow" id="code"></div>
+<h2 id="mission-title" tabindex="-1"></h2>
+<p id="brief"></p>
+<div id="controls"></div>
+<div id="feedback" role="status" aria-live="polite"></div>
+<div class="actions"><button id="hint">Hinweis</button><button id="check" class="primary">Schaltung prüfen ↵</button><button id="next" class="primary" hidden>Weiter →</button></div>
+</section>
+</div>
+</main>
+<footer><span>SPRACHLABOR / ORBITALSTATION</span><span id="progress"></span></footer>
+</div>
+<dialog id="book"><form method="dialog"><button class="close" aria-label="Schliessen">×</button></form><h2>Bordbuch</h2>
+<p><strong>Zeitmaschine.</strong> Stelle das Tempus und die Perspektive ein. Aktiv rückt Handelnde ins Zentrum, Vorgangspassiv den Vorgang, Zustandspassiv das Ergebnis.</p>
+<p><strong>Formlabor.</strong> Wähle die zum Funkspruch passende Verbform. Der Indikativ stellt etwas als wirklich dar, Konjunktiv I dient oft der indirekten Rede, Konjunktiv II etwa Wünschen und Irrealem. Der Imperativ fordert auf.</p>
+<p><strong>Frachtkammer.</strong> Kombiniere Kasus, Begleiter, Adjektivendung und Nomen. Nach «ein» muss das Adjektiv etwa in «ein schwerer Koffer» die Endung tragen.</p>
+<p><strong>Raumschleuse.</strong> Steuere den Kurier zu einem markierten Feld. Bei Wechselpräpositionen steht der Akkusativ für ein Ziel, der Dativ für den Ort. Auch eine Bewegung kann am selben Ort stattfinden.</p>
+<p>Alle Schalter funktionieren mit Maus, Touch und Tastatur. Dein Fortschritt bleibt in diesem Browser gespeichert, sofern der Browser lokalen Speicher erlaubt.</p></dialog>
+</body>
+</html>
