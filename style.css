@@ -181,3 +181,11 @@ h1{font-size:clamp(2.5rem,7vw,5.6rem);font-weight:400}
 
 .location-photo{margin:14px 0 12px}
 .location-photo img{width:100%;max-height:clamp(220px,42vh,420px);object-fit:contain;background:#142528}
+
+.sequence-line{display:grid;gap:5px;margin:0 0 10px;padding-left:1.7em}
+.sequence-line li{padding:4px 6px;border:1px dashed currentColor;border-radius:6px}
+.sequence-line button{width:100%;text-align:left}
+.sequence-bank{display:flex;flex-wrap:wrap;gap:6px}
+.sequence-bank button:disabled{opacity:.42}
+#deduction details{margin-bottom:10px}
+#deduction summary{cursor:pointer;color:var(--gold)}

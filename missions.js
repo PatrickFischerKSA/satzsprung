@@ -135,28 +135,31 @@ const stations = [
 
 const links = [
  {
-  title:'Die Tür ging zuerst auf',
-  sample:'Noah: «Ich öffnete die Tür. Danach hörte ich ein Klappern.»',
-  brief:'Schreibe den zweiten Satz aus Noahs Sicht ins Präsens um. Verbinde beide Ereignisse in der richtigen Reihenfolge.',
-  fields:[['Präsens · ich',['hörst','höre','hören']],['Verbindung',['bevor','nachdem','obwohl']]],
-  answer:[1,1],hint:'Nach «ich» steht «höre». «Nachdem» zeigt, dass Noah die Tür zuerst öffnete.',
-  sentence:([verb,link]) => 'Ich '+verb+' ein Klappern, '+link+' ich die Tür geöffnet habe.'
+  title:'Was geschah vor dem Klappern?',
+  sample:'Noah: «Das Klappern begann, bevor ich die Tür geöffnet hatte.» · Ada: «Die Tür war schon offen, als der Becher umkippte.»',
+  record:'Das Türprotokoll meldet 20.11 Uhr. Auf der Tonspur beginnt das Klappern um 20.12 Uhr.',
+  brief:'Lege zuerst den entscheidenden Beleg ab. Baue dann den korrigierten Satz im Präteritum mit einem Nebensatz im Plusquamperfekt.',
+  fields:[['Beleg',['Türprotokoll und Tonspur','Foto des Wagens']],['Hauptsatz',['Das Klappern begannen','Das Klappern begann']],['Bindewort',['bevor','nachdem']],['Nebensatz',['Noah die Tür öffnete.','Noah die Tür geöffnet hatte.']]],
+  answer:[0,1,1,1],
+  hint:'Die Tür war um 20.11 Uhr offen. Das Klappern begann erst eine Minute später. «Nachdem» verbindet die Ereignisse in dieser Reihenfolge.'
  },
  {
-  title:'Adas Blick auf den Wagen',
-  sample:'Ada: «Ich sah den Pokal auf dem Wagen. Erst danach fiel der Becher.»',
-  brief:'Erzähle über Ada im Präteritum. Wähle die Verbindung, die ihre Beobachtung zeitlich einordnet.',
-  fields:[['Präteritum · Ada',['sahen','siehst','sah']],['Verbindung',['bevor','nachdem','damit']]],
-  answer:[2,0],hint:'«Ada sah» ist die 3. Person Singular im Präteritum. «Bevor» setzt ihre Beobachtung vor den Sturz des Bechers.',
-  sentence:([verb,link]) => 'Ada '+verb+' den Pokal auf dem Wagen, '+link+' der Becher fiel.'
+  title:'Wann stand der Pokal auf dem Wagen?',
+  sample:'Ada: «Der Pokal wurde erst nach dem Sturz des Bechers auf den Wagen gestellt.» · Noah: «Der Pokal stand schon vorher darauf.»',
+  record:'Das Foto von 20.10 Uhr zeigt den Pokal auf dem Wagen und die Kugel noch am oberen Ende der Rampe. Der Becher fiel um 20.12 Uhr.',
+  brief:'Wähle den Beleg und baue einen Satz im Präteritum, der die Reihenfolge festhält.',
+  fields:[['Beleg',['Radspur','Foto und Tonspur']],['Hauptsatz',['Der Pokal stand auf dem Wagen','Der Pokal standen auf dem Wagen']],['Bindewort',['nachdem','bevor']],['Nebensatz',['der Becher fiel.','die Tür geöffnet wurde.']]],
+  answer:[1,0,1,0],
+  hint:'Das Foto zeigt den Pokal zwei Minuten vor dem Klappern auf dem Wagen. Damit widerspricht es Adas Behauptung und stützt Noahs Reihenfolge.'
  },
  {
-  title:'Warum der Wagen rollte',
-  sample:'«Der Wagen rollt los. Die Dominosteine stossen ihn an.»',
-  brief:'Setze den Hauptsatz ins Perfekt. Verbinde ihn mit der Ursache.',
-  fields:[['Perfekt · der Wagen',['hat','ist','sind']],['Verbindung',['obwohl','damit','weil']]],
-  answer:[1,2],hint:'«Losrollen» bildet das Perfekt mit «sein». «Weil» leitet den Grund ein.',
-  sentence:([verb,link]) => 'Der Wagen '+verb+' losgerollt, '+link+' die Dominosteine ihn angestossen haben.'
+  title:'Wer oder was bewegte den Wagen?',
+  sample:'Noah: «Jemand zog den Wagen weg.» · Ada: «Die Dominosteine stiessen ihn an.»',
+  record:'Die Dativspur nennt das Ziel des Stosses. Die Radspur führt von dort hinter den Vorhang.',
+  brief:'Lege den Beleg ab und formuliere die durch ihn gestützte Ursache im Perfekt.',
+  fields:[['Beleg',['Türprotokoll','Dativspur und Radspur']],['Hauptsatz',['Der Wagen hat losgerollt','Der Wagen ist losgerollt']],['Bindewort',['obwohl','weil']],['Nebensatz',['die Dominosteine ihn angestossen haben.','jemand ihn weggezogen hat.']]],
+  answer:[1,1,1,0],
+  hint:'Der Stoss traf den Wagen. «Losrollen» bildet das Perfekt mit «sein». «Weil» verbindet die Bewegung mit ihrer belegten Ursache.'
  }
 ];
 stations.push({name:'Nachtprotokoll',symbol:'☾',missions:links});

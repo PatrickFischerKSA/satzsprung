@@ -4,8 +4,8 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#111820">
 <title>Im Fall der Fälle · Der verschwundene Pokal</title>
-<link rel="stylesheet" href="style.css?v=auftakt">
-<script defer src="missions.js?v=beweisprobe"></script><script defer src="game.js?v=beweisprobe"></script>
+<link rel="stylesheet" href="style.css?v=rekonstruktion">
+<script defer src="missions.js?v=rekonstruktion"></script><script defer src="game.js?v=rekonstruktion"></script>
 </head>
 <body>
 <div class="shell">
@@ -85,13 +85,13 @@
 </section>
 </div>
 <ol id="rounds" aria-label="Ablauf des Krimidinners">
-<li>01 · Spurensuche</li><li>02 · Nachtprotokoll</li><li>03 · Abstimmung</li>
+<li>01 · Spurensuche</li><li>02 · Nachtprotokoll</li><li>03 · Rekonstruktion</li>
 </ol>
 <p id="round-guide" class="intro" aria-live="polite"></p>
 <section class="casebook" aria-labelledby="casebook-title">
 <h2 id="casebook-title">Fallakte Lachen</h2>
 <ul id="clues" aria-label="Gesicherte Spuren"></ul>
-<div class="actions"><button id="night" class="primary" hidden>Nachtprotokoll öffnen</button><button id="verdict" class="primary" disabled>Zur Abstimmung</button></div>
+<div class="actions"><button id="night" class="primary" hidden>Nachtprotokoll öffnen</button><button id="verdict" class="primary" disabled>Zur Rekonstruktion</button></div>
 </section>
 <nav aria-label="Alle Übungen" id="stations"></nav>
 
@@ -107,8 +107,8 @@
 <p>Alle Schalter funktionieren mit Maus, Touch und Tastatur. Dein Fortschritt bleibt in diesem Browser gespeichert, sofern der Browser lokalen Speicher erlaubt.</p></dialog>
 <dialog id="case-file">
 <form method="dialog"><button class="close" aria-label="Schliessen">×</button></form>
-<h2>Abstimmung am Tisch</h2>
-<p>Welche Erklärung passt zu den vier Spuren und den Aussagen aus der Nacht?</p>
+<h2>Rekonstruktion am Tisch</h2>
+<p>Lege fünf belegte Ereignisse in der richtigen Reihenfolge ab. Tippe eine abgelegte Karte an, um sie zurückzulegen.</p>
 <div id="deduction"></div>
 <p id="resolution" role="status"></p>
 </dialog>

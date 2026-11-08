@@ -1,11 +1,13 @@
 const get = id => document.getElementById(id);
-const key = 'satzsprung-krimi-v3';
+const key = 'satzsprung-krimi-v4';
 let solved = new Set();
 try {
  const current = localStorage.getItem(key);
- const saved = JSON.parse(current ?? localStorage.getItem('satzsprung-krimi-v2') ?? localStorage.getItem('satzsprung-krimi-v1') ?? '[]');
+ const previous = localStorage.getItem('satzsprung-krimi-v3');
+ const saved = JSON.parse(current ?? previous ?? localStorage.getItem('satzsprung-krimi-v2') ?? localStorage.getItem('satzsprung-krimi-v1') ?? '[]');
  if (Array.isArray(saved)) solved = new Set(saved.filter(id =>
-  (current !== null || !/^2\/[0-3]$/.test(id)) &&
+  (current !== null || !/^4\//.test(id)) &&
+  (current !== null || previous !== null || !/^2\/[0-3]$/.test(id)) &&
   stations.some((s,i) => s.missions.some((_,j) => id === i+'/'+j))
  ));
 } catch {}
@@ -73,7 +75,7 @@ function nav() {
  get('round-guide').textContent = [
   'Suche mit der Lupe nach vier Spuren im Festsaal.',
   'Das Licht geht aus. Öffne das Nachtprotokoll und verbinde die Aussagen zu einem Ablauf.',
-  'Das Licht geht wieder an. Legt eure Erklärung zur Abstimmung vor.'
+  'Das Licht geht wieder an. Setzt fünf Ereignisse zur Rekonstruktion zusammen.'
  ][round];
  get('progress').textContent = solved.size+' / '+total+' AUFGABEN GELÖST';
 }
@@ -167,7 +169,7 @@ function render() {
  get('code').textContent = m.clue ? 'SPUR '+(index+1)+' VON '+clues.length : 'AUFGABE '+(index+1);
  get('mission-title').textContent = m.title;
  get('brief').textContent = m.brief;
- get('source').textContent = m.sample || m.title;
+ get('source').textContent = m.record || m.sample || m.title;
  get('source').hidden = !m.sample;
  get('replay').hidden = station!==0;
  get('replay').onclick = () => playRecording(false);
@@ -213,6 +215,17 @@ function render() {
   tag.textContent = 'BEWEISSTÜCK '+String(index+1).padStart(2,'0');
   scenery.append(tag);
  }
+ if (station===4) {
+  const cards = m.fields.flatMap(([label,options],row) => options.map((label,column) => ({label,row,column})));
+  const order = [3,6,1,4,7,0,2,5];
+  buildSequence(get('controls'),order.map(i=>cards[i]),4,picks=>{
+   selected = m.fields.map((_,i)=>picks[i]?.row===i ? picks[i].column : null);
+   get('scene-caption').textContent = picks.length ? picks.map(card=>card.label).join(' / ') : 'Beleg → Hauptsatz → Bindewort → Nebensatz';
+   feedback('','');
+  });
+  get('scene-caption').textContent = 'Beleg → Hauptsatz → Bindewort → Nebensatz';
+  return;
+ }
  get('controls').replaceChildren(...m.fields.map(([label,options],i) => {
   const group = document.createElement('fieldset');
   const title = document.createElement('legend');
@@ -250,7 +263,7 @@ function caption() {
   () => words[0] ? m.sample + '  →  ' + words[0] : m.sample,
   () => m.clue ? words[0] || 'Deine Wortgruppe erscheint hier.' : [words[1] === '—' ? '' : words[1],m.stem+(words[2] || '…'),words[3]].filter(Boolean).join(' '),
   () => (places.find(([value]) => value===spot)?.[1] || 'Wähle ein Feld auf der Karte.') + (words[0] && words[1] ? ' · '+words.join(' / ') : '')
- ,() => words.every(Boolean) ? m.sentence(words) : 'Wähle eine Verbform und ein Bindewort.'
+
  ][station]();
  get('scene-caption').textContent = display;
 }
@@ -266,7 +279,7 @@ function check() {
  if (selected.includes(null) || (m.spot && !spot)) {
   const missing = m.fields.filter((_,i) => selected[i]===null).map(([label]) => label);
   if (m.spot && !spot) missing.unshift('Kartenfeld');
-  feedback('Noch offen: '+missing.join(', ')+'.','warn');
+  feedback(station===4 ? 'Lege vier Karten in der Reihenfolge Beleg → Hauptsatz → Bindewort → Nebensatz.' : 'Noch offen: '+missing.join(', ')+'.','warn');
   return;
  }
  const wrong = m.fields.filter((_,i) => selected[i] !== m.answer[i]).map(([label]) => label);
@@ -288,8 +301,8 @@ function check() {
   positionLens(lensPosition.x,lensPosition.y);
   get('next').textContent = 'Zurück zum Tatort';
  }
- if (m.clue && allClues()) get('next').textContent = canVote() ? 'Zur Abstimmung →' : 'Licht aus →';
- if (station===4 && canVote()) get('next').textContent = 'Zur Abstimmung →';
+ if (m.clue && allClues()) get('next').textContent = canVote() ? 'Zur Rekonstruktion →' : 'Licht aus →';
+ if (station===4 && canVote()) get('next').textContent = 'Zur Rekonstruktion →';
  get('controls').querySelectorAll('button').forEach(item => item.disabled = true);
  get('scenery').querySelectorAll('button').forEach(item => item.disabled = true);
  get('next').focus();
@@ -301,7 +314,7 @@ function advance() {
   searchLens.focus();
   return;
  }
- if (get('next').textContent==='Zur Abstimmung →') {
+ if (get('next').textContent==='Zur Rekonstruktion →') {
   showCase();
   return;
  }
@@ -330,36 +343,77 @@ function playRecording(reconstruct) {
  machine.classList.add('playing');
 }
 
+function buildSequence(container,cards,limit,onChange) {
+ const picked = [];
+ const line = document.createElement('ol');
+ line.className = 'sequence-line';
+ line.setAttribute('aria-label','Deine Reihenfolge');
+ const bank = document.createElement('div');
+ bank.className = 'sequence-bank';
+ bank.setAttribute('role','group');
+ bank.setAttribute('aria-label','Verfügbare Karten');
+ const buttons = cards.map(card => button(card.label,() => {
+  picked.push(card);
+  refresh();
+  (buttons.find(item=>!item.disabled) || line.querySelector('button:last-child'))?.focus();
+ }));
+ bank.append(...buttons);
+ container.replaceChildren(line,bank);
+ function refresh() {
+  line.replaceChildren(...Array.from({length:limit},(_,i) => {
+   const item = document.createElement('li');
+   if (!picked[i]) item.textContent = 'Karte wählen';
+   else item.append(button(picked[i].label+' ×', () => {
+    const [removed] = picked.splice(i,1);
+    refresh();
+    buttons[cards.indexOf(removed)].focus();
+   }));
+   return item;
+  }));
+  buttons.forEach((item,i) => {item.disabled = picked.length===limit || picked.includes(cards[i]);});
+  onChange(picked);
+ }
+ refresh();
+}
+
 function showCase() {
  if (!canVote()) return;
  const resolution = get('resolution');
  resolution.textContent = '';
- const steps = [
-  ['Nominativ · Was löste die Kette aus?', ['Die Tür','Die rote Kugel','Der Vorhang'], 1],
-  ['Akkusativ · Was traf der Auslöser?', ['Den leichten Becher','Den Pokal','Den Wagen'], 0],
-  ['Dativ · Wem versetzten die Dominosteine einen Stoss?', ['Dem Tisch','Dem Becher','Dem kleinen Wagen'], 2],
-  ['Genitiv · Wessen Ladung verschwand hinter dem Vorhang?', ['Die Ladung des Tisches','Die Ladung des kleinen Wagens','Die Ladung des Bechers'], 1],
-  ['Abstimmung · Was geschah mit dem Pokal?', ['Noah trug ihn weg.','Ada versteckte ihn unter dem Tisch.','Die Kettenreaktion bewegte den Wagen mit dem Pokal.'], 2]
+ const events = [
+  {id:'roll',label:'Der Wagen rollt mit dem Pokal hinter den Vorhang.'},
+  {id:'carry',label:'Noah trägt den Pokal hinter den Vorhang.'},
+  {id:'cup',label:'Der Becher kippt und setzt die Dominosteine in Bewegung.'},
+  {id:'photo',label:'Das Foto zeigt den Pokal auf dem Wagen und die Kugel noch oben auf der Rampe.'},
+  {id:'strike',label:'Die Dominosteine versetzen dem Wagen einen Stoss.'},
+  {id:'hide',label:'Ada legt den Pokal unter den Tisch.'},
+  {id:'ball',label:'Die rote Kugel rollt los und trifft den Becher.'}
  ];
- get('deduction').replaceChildren();
- const selectors = steps.map(([question,options],i) => {
-  const field = document.createElement('label');
-  const select = document.createElement('select');
-  field.textContent = question;
-  for (const option of ['Bitte wählen',...options]) {
-   const choice = document.createElement('option');
-   choice.textContent = option;
-   select.append(choice);
+ const expected = ['photo','ball','cup','strike','roll'];
+ const deduction = get('deduction');
+ const evidence = document.createElement('details');
+ const summary = document.createElement('summary');
+ summary.textContent = 'Fallakte und Nachtprotokoll nachlesen';
+ evidence.append(summary);
+ for (const record of [...clues.map(m=>m.clue),...links.map(m=>m.record)]) {
+  const item = document.createElement('p');
+  item.textContent = record;
+  evidence.append(item);
+ }
+ const timeline = document.createElement('div');
+ let picked = [];
+ buildSequence(timeline,events,expected.length,cards=>{picked = cards; resolution.textContent = '';});
+ deduction.replaceChildren(evidence,timeline,button('Rekonstruktion prüfen', () => {
+  if (picked.length !== expected.length) {
+   resolution.textContent = 'Die Zeitleiste braucht fünf Ereignisse.';
+   return;
   }
-  const note = document.createElement('small');
-  note.textContent = clues[i]?.clue || 'Noah hörte das Klappern, nachdem er die Tür geöffnet hatte. Ada sah den Pokal auf dem Wagen, bevor der Becher fiel.';
-  field.append(select,note);
-  get('deduction').append(field);
-  return select;
- });
- get('deduction').append(button('Stimme abgeben', () => {
-  if (selectors.some((select,i) => select.selectedIndex !== steps[i][2]+1)) {
-   resolution.textContent = 'Der Ablauf passt noch nicht zu allen vier Spuren. Vergleiche jede Auswahl mit der Spur darunter.';
+  if (picked.some(card=>!expected.includes(card.id))) {
+   resolution.textContent = 'Mindestens eine Karte behauptet etwas, das die Spuren nicht belegen. Prüfe die Aussagen in der Fallakte.';
+   return;
+  }
+  if (picked.some((card,i)=>card.id!==expected[i])) {
+   resolution.textContent = 'Die Ereignisse passen, aber ihre Reihenfolge noch nicht. Prüfe zuerst Foto und Tonspur, dann die Wirkung jedes Stosses.';
    return;
   }
   get('case-file').close();
