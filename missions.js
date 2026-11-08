@@ -61,7 +61,7 @@ const cargo = [
  const determinants = {'der':['der','den','dem','des'],'die':['die','der','den','denen'],'ein':['ein','eine','einen','einem'],'kein':['keine','keiner','keinem','keinen'],'ohne Artikel':['—']}[article];
  const nouns = [...new Set([noun,flex,noun+'n',noun+'s'])];
  const endings = ['e','en','er','es','em'];
- return {title,brief:'Ziehe die Teile aufs Frachtschild unten im Fenster oder tippe sie an. Grundform: '+[article,stem,noun].join(' · '),hint,stem,
+ return {title,brief:'Beantworte die Frage mit dieser Wortgruppe. Wähle Kasus, Begleiter, Adjektivendung und Nomen. Grundform: '+[article,stem,noun].join(' · '),hint,stem,
  fields:[['Kasus',cases],['Begleiter',determinants],['Endung',endings],['Nomen',nouns]],answer:[k,determinants.indexOf(det),endings.indexOf(end),nouns.indexOf(flex)]};
 });
 
@@ -85,13 +85,13 @@ const routes = [
  ['seit','Die Sperre gilt seit einem Monat. Markiere das Uhrsignal oben.','seit einem Monat','«Seit» verlangt den Dativ und kennzeichnet hier einen Zeitraum bis jetzt.','oben',2],
  ['trotz','Fliege trotz des Sturms. Markiere das Wetterfeld hinter dem Hangar.','trotz des Sturms','«Trotz» steht hier mit Genitiv und signalisiert einen Gegengrund.','hinten',3]
 ].map(([prep,brief,sample,hint,spot,k]) => ({
- title:'Kurs ' + prep.toUpperCase(),brief,sample,hint,
+ title:'Kurs ' + prep.toUpperCase(),brief:brief+' Tippe das passende Feld auf der Karte an. Wähle danach Präposition und Kasus.',sample,hint,
  fields:[['Präposition',[...new Set(['in','auf','unter','über','neben','vor','hinter','zwischen','an',prep])]],['Kasus',cases]],
  answer:[['in','auf','unter','über','neben','vor','hinter','zwischen','an',prep].indexOf(prep),k],spot
 }));
 const stations = [
- {name:'Zeitmaschine',symbol:'◴', missions:time},
- {name:'Formlabor',symbol:'⌁',missions:lab},
- {name:'Frachtkammer',symbol:'◇',missions:cargo},
- {name:'Raumschleuse',symbol:'⊹',missions:routes}
+ {name:'Zeitform und Perspektive',symbol:'◴', missions:time},
+ {name:'Verbformen',symbol:'⌁',missions:lab},
+ {name:'Deklination',symbol:'◇',missions:cargo},
+ {name:'Präpositionen',symbol:'⊹',missions:routes}
 ];

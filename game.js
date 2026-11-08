@@ -45,7 +45,7 @@ function nav() {
   tab.setAttribute('aria-pressed', String(i === station && !finale));
   return tab;
  }));
- get('progress').textContent = solved.size+' / '+total+' SIGNALE WIEDERHERGESTELLT';
+ get('progress').textContent = solved.size+' / '+total+' AUFGABEN GELÖST';
 }
 
 function moveShip(x,y) {
@@ -64,7 +64,7 @@ function render() {
  scene.className = 'station-'+station;
  get('scene-label').textContent = stations[station].name.toUpperCase();
  get('counter').textContent = String(index+1).padStart(2,'0')+' / '+stations[station].missions.length;
- get('code').textContent = 'MANÖVER '+(station+1)+'.'+(index+1);
+ get('code').textContent = 'AUFGABE '+(station+1)+'.'+(index+1);
  get('mission-title').textContent = m.title;
  get('brief').textContent = m.brief;
  get('route-brief').textContent = m.spot ? m.brief : '';
@@ -152,7 +152,7 @@ function check() {
  if (locked || finale) return;
  const m = mission();
  if (selected.includes(null) || (m.spot && !spot)) {
-  feedback(m.spot ? 'Wähle ein Kartenfeld, eine Präposition und einen Kasus.' : 'Betätige in jeder Reihe einen Schalter.','warn');
+  feedback(m.spot ? 'Wähle ein Kartenfeld, eine Präposition und einen Kasus.' : 'Wähle in jeder Zeile eine Antwort.','warn');
   return;
  }
  const wrong = m.fields.filter((_,i) => selected[i] !== m.answer[i]).map(([label]) => label);
@@ -167,7 +167,7 @@ function check() {
  try { localStorage.setItem(key,JSON.stringify([...solved])); } catch {}
  nav();
  if (m.spot) get('scene-caption').textContent = m.sample;
- feedback('Signal stabil. '+m.hint,'good');
+ feedback('Richtig. '+m.hint,'good');
  get('check').hidden = get('hint').hidden = true;
  get('next').hidden = false;
  if (solved.size === total) get('next').textContent = 'Fluchtsequenz →';

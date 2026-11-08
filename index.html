@@ -9,14 +9,15 @@
 </head>
 <body>
 <div class="shell">
-<header><a href="./" class="brand"><b>↯</b> SATZSPRUNG</a><button id="manual">Bordbuch</button></header>
+<header><a href="./" class="brand"><b>↯</b> SATZSPRUNG</a><button id="manual">Spielhilfe</button></header>
 <main>
-<div class="eyebrow">FLUGPROTOKOLL / S-07</div>
-<h1>Grammatik gegen<br>die <em>Schwerkraft.</em></h1>
-<p class="intro">Die Station zerfällt. Verschiebe die Zeit, drehe die Perspektive und bring die Fracht zum Fluchtschiff.</p>
+<div class="eyebrow">DEUTSCH / GRAMMATIKSPIEL</div>
+<h1>Grammatik <em>ausprobieren.</em></h1>
+<p class="intro">Wähle eine Übung. Tippe in jeder Zeile eine Antwort an und drücke <strong>Antwort prüfen</strong>. Mit <strong>Hinweis</strong> bekommst du Hilfe.</p>
+<p class="intro"><strong>Erste Aufgabe gemeinsam:</strong> In «Zeitform und Perspektive» wählst du <strong>Aktiv</strong> und <strong>Präsens</strong>. Im Vorschaufenster erscheint «Die Crew öffnet das Schott». Prüfe die Antwort und probiere die nächste selbst.</p>
 <nav aria-label="Stationen" id="stations"></nav>
 <div class="layout">
-<section class="viewport" aria-label="Beobachtungsfenster">
+<section class="viewport" aria-label="Vorschaufenster">
 <div class="hud"><span id="scene-label"></span><span id="counter"></span></div>
 <p id="route-brief" tabindex="-1" hidden></p>
 <div class="stars"></div>
@@ -30,17 +31,17 @@
 <p id="brief"></p>
 <div id="controls"></div>
 <div id="feedback" role="status" aria-live="polite"></div>
-<div class="actions"><button id="hint">Hinweis</button><button id="check" class="primary">Schaltung prüfen ↵</button><button id="next" class="primary" hidden>Weiter →</button></div>
+<div class="actions"><button id="hint">Hinweis</button><button id="check" class="primary">Antwort prüfen</button><button id="next" class="primary" hidden>Weiter →</button></div>
 </section>
 </div>
 </main>
-<footer><span>SPRACHLABOR / ORBITALSTATION</span><span id="progress"></span></footer>
+<footer><span>SATZSPRUNG / DEUTSCH</span><span id="progress"></span></footer>
 </div>
-<dialog id="book"><form method="dialog"><button class="close" aria-label="Schliessen">×</button></form><h2>Bordbuch</h2>
-<p><strong>Zeitmaschine.</strong> Stelle das Tempus und die Perspektive ein. Aktiv rückt Handelnde ins Zentrum, Vorgangspassiv den Vorgang, Zustandspassiv das Ergebnis.</p>
-<p><strong>Formlabor.</strong> Wähle die zum Funkspruch passende Verbform. Der Indikativ stellt etwas als wirklich dar, Konjunktiv I dient oft der indirekten Rede, Konjunktiv II etwa Wünschen und Irrealem. Der Imperativ fordert auf.</p>
-<p><strong>Frachtkammer.</strong> Kombiniere Kasus, Begleiter, Adjektivendung und Nomen. Nach «ein» muss das Adjektiv etwa in «ein schwerer Koffer» die Endung tragen.</p>
-<p><strong>Raumschleuse.</strong> Steuere den Kurier zu einem markierten Feld. Bei Wechselpräpositionen steht der Akkusativ für ein Ziel, der Dativ für den Ort. Auch eine Bewegung kann am selben Ort stattfinden.</p>
+<dialog id="book"><form method="dialog"><button class="close" aria-label="Schliessen">×</button></form><h2>Spielhilfe</h2>
+<p><strong>Zeitform und Perspektive.</strong> Stelle das Tempus und die Perspektive ein. Aktiv rückt Handelnde ins Zentrum, Vorgangspassiv den Vorgang, Zustandspassiv das Ergebnis.</p>
+<p><strong>Verbformen.</strong> Wähle die zum Funkspruch passende Verbform. Der Indikativ stellt etwas als wirklich dar, Konjunktiv I dient oft der indirekten Rede, Konjunktiv II etwa Wünschen und Irrealem. Der Imperativ fordert auf.</p>
+<p><strong>Deklination.</strong> Kombiniere Kasus, Begleiter, Adjektivendung und Nomen. Nach «ein» muss das Adjektiv etwa in «ein schwerer Koffer» die Endung tragen.</p>
+<p><strong>Präpositionen.</strong> Steuere den Kurier zu einem markierten Feld. Bei Wechselpräpositionen steht der Akkusativ für ein Ziel, der Dativ für den Ort. Auch eine Bewegung kann am selben Ort stattfinden.</p>
 <p>Alle Schalter funktionieren mit Maus, Touch und Tastatur. Dein Fortschritt bleibt in diesem Browser gespeichert, sofern der Browser lokalen Speicher erlaubt.</p></dialog>
 </body>
 </html>
