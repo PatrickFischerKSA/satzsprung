@@ -1,10 +1,10 @@
-# Satzsprung · Der verschwundene Pokal
+# Im Fall der Fälle · Der verschwundene Pokal
 
 Ein Grammatikkrimi im Browser. Vier Hinweise führen zur Lösung, und die animierte Kettenreaktion zeigt, was mit dem Pokal passiert ist.
 
 - **Aufnahme** · Sechs Indikativzeiten in Aktiv, Vorgangs- und Zustandspassiv.
 - **Befragung** · Konjunktiv I und II, Imperativ, Infinitiv und Partizipien.
-- **Spurensicherung** · Vier Fälle, Begleiter, Adjektivendungen und Nomenflexion.
+- **Vier Fälle** · Vier Fälle, Begleiter, Adjektivendungen und Nomenflexion.
 - **Aufbau** · Neun Wechselpräpositionen und Beispiele mit festem Kasus.
 
 Die erste Aufgabe jedes Bereichs gibt einen Hinweis. Insgesamt gibt es 62 Aufgaben. Der Browser speichert den Fortschritt lokal.

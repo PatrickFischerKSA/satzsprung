@@ -15,7 +15,7 @@ const places = [
 const clues = [
  'Aufnahme: Die Kugel kippt den Becher um.',
  'Ada sah den Pokal auf dem Wagen.',
- 'Spur: Eine schmale Radspur führt hinter den Vorhang.',
+ 'Wer oder was führt hinter den Vorhang? Eine schmale Radspur.',
  'Aufbau: Becher und Dominosteine bilden eine Reihe bis zum Wagen.'
 ];
 let station = 0, index = 0, selected = [], spot = '', locked = false;

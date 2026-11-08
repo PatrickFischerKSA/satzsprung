@@ -58,7 +58,7 @@ const cargo = [
  const nouns = [...new Set([noun,flex,noun+'n',noun+'s'])];
  const endings = ['e','en','er','es','em'];
  return {title,brief:'Beantworte die Frage mit dieser Wortgruppe. Wähle Kasus, Begleiter, Adjektivendung und Nomen. Grundform: '+[article,stem,noun].join(' · '),hint,stem,
- fields:[['Kasus',cases],['Begleiter',determinants],['Endung',endings],['Nomen',nouns]],answer:[k,determinants.indexOf(det),endings.indexOf(end),nouns.indexOf(flex)]};
+ fields:[['Welcher Fall beantwortet die Frage?',cases],['Begleiter',determinants],['Endung',endings],['Nomen',nouns]],answer:[k,determinants.indexOf(det),endings.indexOf(end),nouns.indexOf(flex)]};
 });
 
 const routes = [
@@ -88,6 +88,6 @@ const routes = [
 const stations = [
  {name:'Aufnahme',symbol:'◴', missions:time},
  {name:'Befragung',symbol:'⌁',missions:lab},
- {name:'Spurensicherung',symbol:'◇',missions:cargo},
+ {name:'Vier Fälle',symbol:'◇',missions:cargo},
  {name:'Aufbau',symbol:'⊹',missions:routes}
 ];
