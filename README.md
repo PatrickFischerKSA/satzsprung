@@ -7,6 +7,6 @@ Ein Grammatikkrimi im Browser. Vier Hinweise führen zur Lösung, und die animie
 - **Vier Fälle** · Vier Fälle, Begleiter, Adjektivendungen und Nomenflexion.
 - **Aufbau** · Neun Wechselpräpositionen und Beispiele mit festem Kasus.
 
-Die ersten vier Aufgaben unter «Vier Fälle» liefern die Spuren für die Rekonstruktion. Insgesamt gibt es 62 Aufgaben. Der Browser speichert den Fortschritt lokal.
+Die ersten vier Aufgaben unter «Vier Fälle» liefern die Spuren für die Rekonstruktion. Im Nachtprotokoll werden Verbformen und Satzverbindungen geprüft. Danach folgt die Abstimmung. Insgesamt gibt es 65 Aufgaben. Der Browser speichert den Fortschritt lokal.
 
 Zum Offline-Spielen `index.html` öffnen. Für GitHub Pages die Dateien ins Repository übernehmen und unter **Settings → Pages** den Branch und **/ (root)** auswählen.

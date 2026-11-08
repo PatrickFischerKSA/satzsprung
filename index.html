@@ -9,14 +9,18 @@
 </head>
 <body>
 <div class="shell">
-<header><a href="./" class="brand"><b>↯</b> SATZSPRUNG</a><button id="manual">Spielhilfe</button></header>
+<header><a href="./" class="brand">IM FALL DER FÄLLE</a><button id="manual">Spielhilfe</button></header>
 <main>
 <div class="eyebrow">FALL 01 / DER VERSCHWUNDENE POKAL</div>
 <h1>Im Fall der <em>Fälle</em></h1>
-<p class="intro">Der Pokal stand eben noch auf dem Tisch. Dann klapperte es hinter dem Vorhang. Ada tippt auf einen Diebstahl. Noah sagt, er habe nur die Tür geöffnet.</p>
-<p class="intro">Vier Fragen helfen bei der Spurensuche: Wer oder was? Wen oder was? Wem? Wessen?</p>
-<p class="intro">Starte bei «Vier Fälle». Die ersten vier Aufgaben liefern je eine Spur. Sobald du alle gesichert hast, kannst du den Ablauf unter «Fall lösen» zusammensetzen.</p>
+<p class="intro">Beim Festessen verschwindet der Pokal. Hinter dem Vorhang klappert es. Ada spricht von Diebstahl. Noah behauptet, er habe bloss die Tür geöffnet.</p>
+<details class="role"><summary>Verdeckte Rollenkarte öffnen</summary><strong>Du leitest die Ermittlungen.</strong> Frag zuerst nach den Spuren. Am Ende leitest du die Abstimmung. Spielt ihr am selben Tisch, lest Ada und Noahs Aussagen mit verteilten Rollen vor.</details>
+<ol id="rounds" aria-label="Ablauf des Krimidinners">
+<li>01 · Spurensuche</li><li>02 · Nachtprotokoll</li><li>03 · Abstimmung</li>
+</ol>
+<p id="round-guide" class="intro" aria-live="polite"></p>
 <ul id="clues" aria-label="Gesicherte Hinweise"></ul>
+<button id="night" class="primary" hidden>Nachtprotokoll öffnen</button>
 <button id="verdict" class="primary" disabled>Fall lösen</button>
 <nav aria-label="Stationen" id="stations"></nav>
 <div class="layout">
@@ -58,7 +62,8 @@
 <p>Alle Schalter funktionieren mit Maus, Touch und Tastatur. Dein Fortschritt bleibt in diesem Browser gespeichert, sofern der Browser lokalen Speicher erlaubt.</p></dialog>
 <dialog id="case-file">
 <form method="dialog"><button class="close" aria-label="Schliessen">×</button></form>
-<h2>Setze die vier Spuren zusammen</h2>
+<h2>Abstimmung am Tisch</h2>
+<p>Welche Erklärung passt zu den vier Spuren und den Aussagen aus der Nacht?</p>
 <div id="deduction"></div>
 <p id="resolution" role="status"></p>
 </dialog>

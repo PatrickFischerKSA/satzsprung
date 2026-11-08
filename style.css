@@ -70,3 +70,24 @@ dialog::backdrop{background:#000a}.close{float:right}
 #deduction label{display:grid;gap:5px}
 #deduction select{width:100%;min-height:44px;background:#40312b;color:inherit;border:1px solid var(--line);border-radius:7px;padding:5px 8px;font:inherit}
 #deduction small{color:var(--muted)}
+
+/* The table changes from candlelight to a blue night round. */
+body{background:radial-gradient(ellipse at 74% 0,#633c34 0,transparent 55%),#211a18}
+body:has(.station-4){background:radial-gradient(ellipse at 74% 0,#28365a 0,transparent 60%),#171825}
+main{padding-top:clamp(25px,5vw,60px)}
+h1{max-width:12ch;text-wrap:balance}
+.role{max-width:70ch;border:1px solid #a66e57;border-radius:8px;background:#3b2925;padding:12px 16px;line-height:1.5}
+.role summary{cursor:pointer;color:var(--gold);font-weight:700}
+.role[open] summary{margin-bottom:8px}
+#rounds{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:22px 0 10px}
+#rounds li{font:700 .8rem var(--mono);color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:9px 13px}
+#rounds [aria-current=step]{color:var(--ink);background:var(--gold);border-color:var(--gold)}
+#clues{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+#clues li{background:#2e211ec9;padding:10px 12px}
+.station-4{background:radial-gradient(ellipse at 50% 40%,#43527c,#1c2138)!important}
+.station-4 .speech{box-shadow:0 10px 35px #1117289c}
+#case-file{border-top:5px solid var(--gold)}
+@media(max-width:540px){
+ #clues{grid-template-columns:1fr}
+ #rounds li{font-size:.69rem;padding:7px 9px}
+}

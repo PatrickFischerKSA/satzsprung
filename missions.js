@@ -91,3 +91,31 @@ const stations = [
  {name:'Vier Fälle',symbol:'◇',missions:cargo},
  {name:'Aufbau',symbol:'⊹',missions:routes}
 ];
+
+const links = [
+ {
+  title:'Die Tür ging zuerst auf',
+  sample:'Noah: «Ich öffnete die Tür. Danach hörte ich ein Klappern.»',
+  brief:'Schreibe den zweiten Satz aus Noahs Sicht ins Präsens um. Verbinde beide Ereignisse in der richtigen Reihenfolge.',
+  fields:[['Präsens · ich',['hörst','höre','hören']],['Verbindung',['bevor','nachdem','obwohl']]],
+  answer:[1,1],hint:'Nach «ich» steht «höre». «Nachdem» zeigt, dass Noah die Tür zuerst öffnete.',
+  sentence:([verb,link]) => 'Ich '+verb+' ein Klappern, '+link+' ich die Tür geöffnet habe.'
+ },
+ {
+  title:'Adas Blick auf den Wagen',
+  sample:'Ada: «Ich sah den Pokal auf dem Wagen. Erst danach fiel der Becher.»',
+  brief:'Erzähle über Ada im Präteritum. Wähle die Verbindung, die ihre Beobachtung zeitlich einordnet.',
+  fields:[['Präteritum · Ada',['sahen','siehst','sah']],['Verbindung',['bevor','nachdem','damit']]],
+  answer:[2,0],hint:'«Ada sah» ist die 3. Person Singular im Präteritum. «Bevor» setzt ihre Beobachtung vor den Sturz des Bechers.',
+  sentence:([verb,link]) => 'Ada '+verb+' den Pokal auf dem Wagen, '+link+' der Becher fiel.'
+ },
+ {
+  title:'Warum der Wagen rollte',
+  sample:'«Der Wagen rollt los. Die Dominosteine stossen ihn an.»',
+  brief:'Setze den Hauptsatz ins Perfekt. Verbinde ihn mit der Ursache.',
+  fields:[['Perfekt · der Wagen',['hat','ist','sind']],['Verbindung',['obwohl','damit','weil']]],
+  answer:[1,2],hint:'«Losrollen» bildet das Perfekt mit «sein». «Weil» leitet den Grund ein.',
+  sentence:([verb,link]) => 'Der Wagen '+verb+' losgerollt, '+link+' die Dominosteine ihn angestossen haben.'
+ }
+];
+stations.push({name:'Nachtprotokoll',symbol:'☾',missions:links});

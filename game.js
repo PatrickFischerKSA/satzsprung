@@ -15,6 +15,8 @@ const places = [
 const clues = cargo.filter(m => m.clue);
 const clueId = i => '2/'+i;
 const allClues = () => clues.every((_,i) => solved.has(clueId(i)));
+const nightComplete = () => links.every((_,i) => solved.has('4/'+i));
+const canVote = () => allClues() && nightComplete();
 let station = 0, index = 0, selected = [], spot = '', locked = false;
 const mission = () => stations[station].missions[index];
 const id = () => station + '/' + index;
@@ -46,6 +48,7 @@ function nav() {
   const count = s.missions.filter((_,j) => solved.has(i+'/'+j)).length;
   const tab = button(s.symbol+'  '+s.name+'  '+count+'/'+s.missions.length, () => { openStation(i); focusMission(); });
   tab.setAttribute('aria-pressed', String(i === station));
+  tab.disabled = i===4 && !allClues();
   return tab;
  }));
  get('clues').replaceChildren(...clues.map((clue,i) => {
@@ -53,7 +56,18 @@ function nav() {
   item.textContent = cases[i]+' · '+(solved.has(clueId(i)) ? clue.clue : 'Spur fehlt');
   return item;
  }));
- get('verdict').disabled = !allClues();
+ const round = !allClues() ? 0 : nightComplete() ? 2 : 1;
+ [...get('rounds').children].forEach((item,i) => {
+  if (i===round) item.setAttribute('aria-current','step');
+  else item.removeAttribute('aria-current');
+ });
+ get('night').hidden = round !== 1;
+ get('verdict').disabled = !canVote();
+ get('round-guide').textContent = [
+  'Am Tisch. Sichere unter «Vier Fälle» die vier Spuren.',
+  'Das Licht geht aus. Öffne das Nachtprotokoll und verbinde die Aussagen zu einem Ablauf.',
+  'Das Licht geht wieder an. Legt eure Erklärung zur Abstimmung vor.'
+ ][round];
  get('progress').textContent = solved.size+' / '+total+' AUFGABEN GELÖST';
 }
 
@@ -107,10 +121,10 @@ function render() {
    marker.setAttribute('aria-pressed','false');
    scenery.append(marker);
   }
- } else if (station === 1) {
+ } else if (station === 1 || station === 4) {
   const bubble = document.createElement('blockquote');
   bubble.className = 'speech';
-  bubble.textContent = index === 0 ? '«Der Pokal steht auf dem Wagen.» — Ada' : m.sample;
+  bubble.textContent = station===1 && index===0 ? '«Der Pokal steht auf dem Wagen.» — Ada' : m.sample;
   scenery.append(bubble);
  } else if (station === 2) {
   const tag = document.createElement('div');
@@ -155,6 +169,7 @@ function caption() {
   () => words[0] ? m.sample + '  →  ' + words[0] : m.sample,
   () => [words[1] === '—' ? '' : words[1],m.stem+(words[2] || '…'),words[3]].filter(Boolean).join(' '),
   () => (places.find(([value]) => value===spot)?.[1] || 'Wähle ein Feld auf der Karte.') + (words[0] && words[1] ? ' · '+words.join(' / ') : '')
+ ,() => words.every(Boolean) ? m.sentence(words) : 'Wähle eine Verbform und ein Bindewort.'
  ][station]();
  get('scene-caption').textContent = display;
 }
@@ -186,16 +201,21 @@ function check() {
  feedback('Richtig. '+m.hint+(m.clue ? ' Spur gesichert: '+m.clue : ''),'good');
  get('check').hidden = get('hint').hidden = true;
  get('next').hidden = false;
- if (m.clue && allClues()) get('next').textContent = 'Zum Fallabschluss →';
+ if (m.clue && allClues()) get('next').textContent = canVote() ? 'Zur Abstimmung →' : 'Licht aus →';
+ if (station===4 && canVote()) get('next').textContent = 'Zur Abstimmung →';
  get('controls').querySelectorAll('button').forEach(item => item.disabled = true);
  get('scenery').querySelectorAll('button').forEach(item => item.disabled = true);
  get('next').focus();
 }
 
 function advance() {
- if (mission().clue && allClues() && get('next').textContent==='Zum Fallabschluss →') {
+ if (get('next').textContent==='Zur Abstimmung →') {
   showCase();
-  get('next').textContent = 'Weiter →';
+  return;
+ }
+ if (get('next').textContent==='Licht aus →') {
+  openStation(4);
+  focusMission();
   return;
  }
  const pending = stations[station].missions.findIndex((_,j) => j > index && !solved.has(station+'/'+j));
@@ -219,14 +239,15 @@ function playRecording(reconstruct) {
 }
 
 function showCase() {
- if (!allClues()) return;
+ if (!canVote()) return;
  const resolution = get('resolution');
  resolution.textContent = '';
  const steps = [
   ['Nominativ · Was löste die Kette aus?', ['Die Tür','Die rote Kugel','Der Vorhang'], 1],
   ['Akkusativ · Was traf der Auslöser?', ['Den leichten Becher','Den Pokal','Den Wagen'], 0],
   ['Dativ · Wem versetzten die Dominosteine einen Stoss?', ['Dem Tisch','Dem Becher','Dem kleinen Wagen'], 2],
-  ['Genitiv · Wessen Ladung verschwand hinter dem Vorhang?', ['Die Ladung des Tisches','Die Ladung des kleinen Wagens','Die Ladung des Bechers'], 1]
+  ['Genitiv · Wessen Ladung verschwand hinter dem Vorhang?', ['Die Ladung des Tisches','Die Ladung des kleinen Wagens','Die Ladung des Bechers'], 1],
+  ['Abstimmung · Was geschah mit dem Pokal?', ['Noah trug ihn weg.','Ada versteckte ihn unter dem Tisch.','Die Kettenreaktion bewegte den Wagen mit dem Pokal.'], 2]
  ];
  get('deduction').replaceChildren();
  const selectors = steps.map(([question,options],i) => {
@@ -239,12 +260,12 @@ function showCase() {
    select.append(choice);
   }
   const note = document.createElement('small');
-  note.textContent = clues[i].clue;
+  note.textContent = clues[i]?.clue || 'Noah hörte das Klappern, nachdem er die Tür geöffnet hatte. Ada sah den Pokal auf dem Wagen, bevor der Becher fiel.';
   field.append(select,note);
   get('deduction').append(field);
   return select;
  });
- get('deduction').append(button('Ablauf prüfen', () => {
+ get('deduction').append(button('Stimme abgeben', () => {
   if (selectors.some((select,i) => select.selectedIndex !== steps[i][2]+1)) {
    resolution.textContent = 'Der Ablauf passt noch nicht zu allen vier Spuren. Vergleiche jede Auswahl mit der Spur darunter.';
    return;
@@ -260,6 +281,7 @@ function showCase() {
 }
 
 get('verdict').onclick = showCase;
+get('night').onclick = () => { openStation(4); focusMission(); };
 const dock = get('scene-caption');
 dock.addEventListener('dragover',event => {
  if (station===2 && !locked && event.dataTransfer.types.includes('application/x-satzsprung-part')) {
@@ -284,4 +306,4 @@ document.addEventListener('keydown',event => {
   if (locked) advance(); else check();
  }
 });
-openStation(2);
+openStation(allClues() && !nightComplete() ? 4 : 2);
