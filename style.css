@@ -173,3 +173,8 @@ h1{font-size:clamp(2.5rem,7vw,5.6rem);font-weight:400}
 .soundtrack{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 0}
 .soundtrack button:disabled{opacity:.55}
 #music-status{font-size:.85rem;color:var(--muted)}
+
+.location-photo{margin:22px 0 0;overflow:hidden;border:1px solid var(--line);border-radius:14px;background:#1b3033}
+.location-photo img{display:block;width:100%;height:auto}
+.location-photo figcaption{padding:12px 16px;font-size:.85rem;line-height:1.5;color:var(--muted)}
+.location-photo a{color:#ffdfac;text-underline-offset:.18em}
