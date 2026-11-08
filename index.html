@@ -4,8 +4,8 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#111820">
 <title>Im Fall der Fälle · Der verschwundene Pokal</title>
-<link rel="stylesheet" href="style.css?v=lachen-foto">
-<script defer src="missions.js"></script><script defer src="game.js?v=musik"></script>
+<link rel="stylesheet" href="style.css?v=auftakt">
+<script defer src="missions.js"></script><script defer src="game.js?v=auftakt"></script>
 </head>
 <body>
 <div class="shell">
@@ -20,10 +20,10 @@
 <div class="eyebrow">LACHEN SZ · FALL 01</div>
 <h1>Im Fall der <em>Fälle</em></h1>
 <p class="intro">In Lachen gibt es heute wenig zu lachen. Beim Festessen am Hafen verschwindet der Regattapokal. Hinter dem Vorhang hat es geklappert. Ada vermutet einen Diebstahl.</p>
-<ol id="rounds" aria-label="Ablauf des Krimidinners">
-<li>01 · Spurensuche</li><li>02 · Nachtprotokoll</li><li>03 · Abstimmung</li>
-</ol>
-<p id="round-guide" class="intro" aria-live="polite"></p>
+<figure class="location-photo">
+<img src="assets/lachen-seen-from-lake-zurich.jpg" alt="Lachen SZ vom Zürichsee aus gesehen" width="4224" height="2368">
+<figcaption>«Lachen seen from lake Zurich.jpg» von <a href="https://commons.wikimedia.org/wiki/User:Pete_Godomski">Pete Godomski</a>, 28. Mai 2015. <a href="https://commons.wikimedia.org/wiki/File:Lachen_seen_from_lake_Zurich.jpg">Quelle: Wikimedia Commons</a> · <a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0 International</a> · Unverändert.</figcaption>
+</figure>
 <div class="layout">
 <section class="viewport" aria-label="Vorschaufenster">
 <div class="hud"><span id="scene-label"></span><span id="counter"></span></div>
@@ -84,16 +84,17 @@
 <div class="actions"><button id="hint">Hinweis</button><button id="check" class="primary">Antwort prüfen</button><button id="next" class="primary" hidden>Weiter →</button></div>
 </section>
 </div>
+<ol id="rounds" aria-label="Ablauf des Krimidinners">
+<li>01 · Spurensuche</li><li>02 · Nachtprotokoll</li><li>03 · Abstimmung</li>
+</ol>
+<p id="round-guide" class="intro" aria-live="polite"></p>
 <section class="casebook" aria-labelledby="casebook-title">
 <h2 id="casebook-title">Fallakte Lachen</h2>
 <ul id="clues" aria-label="Gesicherte Spuren"></ul>
 <div class="actions"><button id="night" class="primary" hidden>Nachtprotokoll öffnen</button><button id="verdict" class="primary" disabled>Zur Abstimmung</button></div>
 </section>
 <nav aria-label="Alle Übungen" id="stations"></nav>
-<figure class="location-photo">
-<img src="assets/lachen-seen-from-lake-zurich.jpg" alt="Lachen SZ vom Zürichsee aus gesehen" width="4224" height="2368" loading="lazy">
-<figcaption>«Lachen seen from lake Zurich.jpg» von <a href="https://commons.wikimedia.org/wiki/User:Pete_Godomski">Pete Godomski</a>, 28. Mai 2015. <a href="https://commons.wikimedia.org/wiki/File:Lachen_seen_from_lake_Zurich.jpg">Quelle: Wikimedia Commons</a> · <a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0 International</a> · Unverändert.</figcaption>
-</figure>
+
 </main>
 <footer><span>IM FALL DER FÄLLE</span><span id="progress"></span></footer>
 </div>

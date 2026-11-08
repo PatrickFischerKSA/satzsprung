@@ -178,3 +178,6 @@ h1{font-size:clamp(2.5rem,7vw,5.6rem);font-weight:400}
 .location-photo img{display:block;width:100%;height:auto}
 .location-photo figcaption{padding:12px 16px;font-size:.85rem;line-height:1.5;color:var(--muted)}
 .location-photo a{color:#ffdfac;text-underline-offset:.18em}
+
+.location-photo{margin:14px 0 12px}
+.location-photo img{width:100%;max-height:clamp(220px,42vh,420px);object-fit:contain;background:#142528}

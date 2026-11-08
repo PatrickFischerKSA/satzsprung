@@ -394,8 +394,7 @@ document.addEventListener('keydown',event => {
   if (locked) advance(); else if (!get('check').hidden) check();
  }
 });
-if (!allClues()) showCrimeScene();
-else openStation(nightComplete() ? 2 : 4);
+showCrimeScene();
 
 const tracks = [
  ['Die 4 Fälle Part III · Rap feat. Nikodem','audio/die-vier-faelle.mp3'],
