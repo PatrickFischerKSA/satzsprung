@@ -1,5 +1,5 @@
 const get = id => document.getElementById(id);
-const key = 'satzsprung-v1';
+const key = 'satzsprung-krimi-v1';
 let solved = new Set();
 try {
  const saved = JSON.parse(localStorage.getItem(key) || '[]');
@@ -7,12 +7,18 @@ try {
 } catch {}
 const total = stations.reduce((sum,s) => sum + s.missions.length,0);
 const places = [
- ['oben','Über der Brücke',50,16],['dach','Hangardach',17,16],
- ['wand','Aussenwand',17,47],['innen','Hangar / Tunnel',50,47],
- ['seite','Seitenfähre',83,16],['lücke','Zwischen den Modulen',83,47],
- ['vor','Vorplatz',17,80],['unten','Unter der Brücke',50,80],['hinten','Hinter dem Hangar',83,80]
+ ['oben','Kamera über dem Tisch',50,16],['dach','Rampe',17,16],
+ ['wand','Wand',17,47],['innen','Schachtel',50,47],
+ ['seite','Lampe neben dem Tisch',83,16],['lücke','Zwischen den Dominosteinen',83,47],
+ ['vor','Vor dem Tisch',17,80],['unten','Unter dem Tisch',50,80],['hinten','Hinter dem Tisch',83,80]
 ];
-let station = 0, index = 0, selected = [], spot = '', locked = false, finale = false;
+const clues = [
+ 'Aufnahme: Die Kugel kippt den Becher um.',
+ 'Ada sah den Pokal auf dem Wagen.',
+ 'Spur: Eine schmale Radspur führt hinter den Vorhang.',
+ 'Aufbau: Becher und Dominosteine bilden eine Reihe bis zum Wagen.'
+];
+let station = 0, index = 0, selected = [], spot = '', locked = false;
 const mission = () => stations[station].missions[index];
 const id = () => station + '/' + index;
 
@@ -33,7 +39,7 @@ function openStation(i) {
 }
 
 function focusMission() {
- const target = station === 3 && !finale && matchMedia('(max-width: 850px)').matches
+ const target = station === 3 && matchMedia('(max-width: 850px)').matches
   ? get('route-brief') : get('mission-title');
  target.focus();
 }
@@ -42,20 +48,25 @@ function nav() {
  get('stations').replaceChildren(...stations.map((s,i) => {
   const count = s.missions.filter((_,j) => solved.has(i+'/'+j)).length;
   const tab = button(s.symbol+'  '+s.name+'  '+count+'/'+s.missions.length, () => { openStation(i); focusMission(); });
-  tab.setAttribute('aria-pressed', String(i === station && !finale));
+  tab.setAttribute('aria-pressed', String(i === station));
   return tab;
  }));
+ get('clues').replaceChildren(...clues.map((clue,i) => {
+  const item = document.createElement('li');
+  item.textContent = solved.has(i+'/0') ? clue : 'Hinweis '+(i+1)+' fehlt';
+  return item;
+ }));
+ get('verdict').disabled = !clues.every((_,i) => solved.has(i+'/0'));
  get('progress').textContent = solved.size+' / '+total+' AUFGABEN GELÖST';
 }
 
-function moveShip(x,y) {
- get('ship').style.left = x+'%';
- get('ship').style.top = y+'%';
+function moveToken(x,y) {
+ get('token').style.left = x+'%';
+ get('token').style.top = y+'%';
 }
 
 function render() {
  locked = false;
- finale = false;
  spot = '';
  selected = mission().fields.map(() => null);
  nav();
@@ -67,7 +78,13 @@ function render() {
  get('code').textContent = 'AUFGABE '+(station+1)+'.'+(index+1);
  get('mission-title').textContent = m.title;
  get('brief').textContent = m.brief;
- get('route-brief').textContent = m.spot ? m.brief : '';
+ get('source').textContent = m.sample || m.title;
+ get('source').hidden = !m.sample;
+ get('replay').hidden = station!==0;
+ get('replay').onclick = () => playRecording(false);
+ get('machine').classList.remove('playing');
+ get('machine').classList.remove('reconstruction');
+ get('route-brief').textContent = m.spot ? m.sample+' '+m.brief : '';
  get('route-brief').hidden = !m.spot;
  get('brief').classList.toggle('route-in-window',Boolean(m.spot));
  get('feedback').textContent = '';
@@ -77,14 +94,14 @@ function render() {
  get('next').textContent = 'Weiter →';
  const scenery = get('scenery');
  scenery.replaceChildren();
- moveShip(50,50);
+ moveToken(50,50);
  if (station === 3) {
-  moveShip(50,32);
+  moveToken(50,32);
   for (const [value,label,x,y] of places) {
    const marker = button(label, () => {
     if (locked) return;
     spot = value;
-    moveShip(x,y);
+    moveToken(x,y);
     scenery.querySelectorAll('button').forEach(item => item.setAttribute('aria-pressed',String(item === marker)));
     caption();
    },'marker');
@@ -93,11 +110,16 @@ function render() {
    marker.setAttribute('aria-pressed','false');
    scenery.append(marker);
   }
- } else {
-  const emblem = document.createElement('div');
-  emblem.className = 'emblem';
-  emblem.textContent = stations[station].symbol;
-  scenery.append(emblem);
+ } else if (station === 1) {
+  const bubble = document.createElement('blockquote');
+  bubble.className = 'speech';
+  bubble.textContent = index === 0 ? '«Der Pokal steht auf dem Wagen.» — Ada' : m.sample;
+  scenery.append(bubble);
+ } else if (station === 2) {
+  const tag = document.createElement('div');
+  tag.className = 'evidence';
+  tag.textContent = 'BEWEISSTÜCK '+String(index+1).padStart(2,'0');
+  scenery.append(tag);
  }
  get('controls').replaceChildren(...m.fields.map(([label,options],i) => {
   const group = document.createElement('fieldset');
@@ -109,13 +131,11 @@ function render() {
     if (locked) return;
     selected[i] = j;
     group.querySelectorAll('button').forEach((item,k) => item.setAttribute('aria-pressed',String(j===k)));
-    if (station===0 && i===1) moveShip(23+j*10,50);
-    if (station===0 && i===0) scene.dataset.voice = j;
     caption();
    };
    const part = button(option, install);
    part.setAttribute('aria-pressed','false');
-   if (station===2) {
+   if (station===2 && matchMedia('(pointer: fine)').matches) {
     part.draggable = true;
     part.addEventListener('dragstart',event => {
      if (locked) { event.preventDefault(); return; }
@@ -127,7 +147,6 @@ function render() {
   });
   return group;
  }));
- scene.removeAttribute('data-voice');
  caption();
 }
 
@@ -149,7 +168,7 @@ function feedback(message,type) {
 }
 
 function check() {
- if (locked || finale) return;
+ if (locked) return;
  const m = mission();
  if (selected.includes(null) || (m.spot && !spot)) {
   feedback(m.spot ? 'Wähle ein Kartenfeld, eine Präposition und einen Kasus.' : 'Wähle in jeder Zeile eine Antwort.','warn');
@@ -166,51 +185,67 @@ function check() {
  solved.add(id());
  try { localStorage.setItem(key,JSON.stringify([...solved])); } catch {}
  nav();
- if (m.spot) get('scene-caption').textContent = m.sample;
+ if (m.spot) get('scene-caption').textContent = m.result;
  feedback('Richtig. '+m.hint,'good');
  get('check').hidden = get('hint').hidden = true;
  get('next').hidden = false;
- if (solved.size === total) get('next').textContent = 'Fluchtsequenz →';
+ if (index===0 && !get('verdict').disabled) get('next').textContent = 'Zum Fallabschluss →';
  get('controls').querySelectorAll('button').forEach(item => item.disabled = true);
  get('scenery').querySelectorAll('button').forEach(item => item.disabled = true);
  get('next').focus();
 }
 
 function advance() {
- if (finale) {
-  openStation(0);
- } else if (solved.size === total) {
-  finale = true;
-  nav();
-  get('scene').className = 'escape';
-  get('scene').removeAttribute('data-voice');
-  get('scenery').replaceChildren();
-  moveShip(94,15);
-  get('scene-label').textContent = 'ORBIT VERLASSEN';
-  get('counter').textContent = total+' / '+total;
-  get('scene-caption').textContent = 'Die Crew flieht. Die Crew wurde gerettet. Die Crew ist gerettet.';
-  get('code').textContent = 'FLUGPROTOKOLL / ENDE';
-  get('mission-title').textContent = 'Die Station war das Schiff.';
-  get('route-brief').hidden = true;
-  get('brief').classList.remove('route-in-window');
-  get('brief').textContent = 'Mit jedem Signal hast du einen Teil der Station wieder in Betrieb genommen. Jetzt löst sich die Kommandozentrale vom Trümmerfeld und nimmt Kurs auf die Erde.';
-  get('controls').replaceChildren();
-  feedback('Alle Systeme arbeiten.','good');
-  get('next').textContent = 'Manöver wiederholen';
+ if (index===0 && !get('verdict').disabled && get('next').textContent==='Zum Fallabschluss →') {
+  showCase();
+  get('next').textContent = 'Weiter →';
+  return;
+ }
+ const pending = stations[station].missions.findIndex((_,j) => j > index && !solved.has(station+'/'+j));
+ if (index===0 && !solved.has(((station+1)%4)+'/0')) {
+  openStation((station+1)%4);
+ } else if (pending >= 0) {
+  index = pending;
+  render();
  } else {
-  const pending = stations[station].missions.findIndex((_,j) => j > index && !solved.has(station+'/'+j));
-  if (pending >= 0) {
-   index = pending;
-   render();
-   focusMission();
-   return;
-  }
   const remaining = stations.findIndex((s,i) => s.missions.some((_,j) => !solved.has(i+'/'+j)));
-  openStation(remaining);
+  openStation(remaining < 0 ? 0 : remaining);
  }
  focusMission();
 }
 
+function playRecording(reconstruct) {
+ const machine = get('machine');
+ machine.classList.remove('playing');
+ machine.classList.toggle('reconstruction',reconstruct);
+ // Restart the animation when the recording is replayed.
+ void machine.getBoundingClientRect();
+ machine.classList.add('playing');
+}
+
+function showCase() {
+ const resolution = get('resolution');
+ resolution.textContent = '';
+ get('deduction').replaceChildren(...[
+  'Ada hat den Pokal weggetragen.',
+  'Der Wagen ist hinter den Vorhang gerollt.',
+  'Noah hat den Pokal in die Schachtel gelegt.'
+ ].map((answer,i) => button(answer, () => {
+  if (i !== 1) {
+   resolution.textContent = 'Schau noch einmal auf die Radspuren und Adas Aussage.';
+   return;
+  }
+  get('case-file').close();
+  openStation(0);
+  get('scene-caption').textContent = 'Fall gelöst. Die Kugel kippte den Becher um. Die Dominosteine stiessen den Wagen an. Der Pokal steht hinter dem Vorhang.';
+  playRecording(true);
+  get('replay').onclick = () => playRecording(true);
+  get('replay').focus();
+ })));
+ get('case-file').showModal();
+}
+
+get('verdict').onclick = showCase;
 const dock = get('scene-caption');
 dock.addEventListener('dragover',event => {
  if (station===2 && !locked && event.dataTransfer.types.includes('application/x-satzsprung-part')) {
@@ -235,5 +270,5 @@ document.addEventListener('keydown',event => {
   if (locked) advance(); else check();
  }
 });
-const start = stations.findIndex((s,i) => s.missions.some((_,j) => !solved.has(i+'/'+j)));
+const start = stations.findIndex((_,i) => !solved.has(i+'/0'));
 openStation(Math.max(0,start));

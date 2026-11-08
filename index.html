@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#111820">
-<title>Satzsprung · Grammatik gegen die Schwerkraft</title>
+<title>Der verschwundene Pokal · Satzsprung</title>
 <link rel="stylesheet" href="style.css">
 <script defer src="missions.js"></script><script defer src="game.js"></script>
 </head>
@@ -11,24 +11,36 @@
 <div class="shell">
 <header><a href="./" class="brand"><b>↯</b> SATZSPRUNG</a><button id="manual">Spielhilfe</button></header>
 <main>
-<div class="eyebrow">DEUTSCH / GRAMMATIKSPIEL</div>
-<h1>Grammatik <em>ausprobieren.</em></h1>
-<p class="intro">Wähle eine Übung. Tippe in jeder Zeile eine Antwort an und drücke <strong>Antwort prüfen</strong>. Mit <strong>Hinweis</strong> bekommst du Hilfe.</p>
-<p class="intro"><strong>Erste Aufgabe gemeinsam:</strong> In «Zeitform und Perspektive» wählst du <strong>Aktiv</strong> und <strong>Präsens</strong>. Im Vorschaufenster erscheint «Die Crew öffnet das Schott». Prüfe die Antwort und probiere die nächste selbst.</p>
+<div class="eyebrow">SATZSPRUNG / FALL 01</div>
+<h1>Der verschwundene <em>Pokal.</em></h1>
+<p class="intro">Der Pokal stand eben noch auf dem Tisch. Dann klapperte es hinter dem Vorhang. Ada tippt auf einen Diebstahl. Noah sagt, er habe nur die Tür geöffnet.</p>
+<p class="intro">Löse in jedem Bereich die erste Aufgabe, um einen Hinweis zu sichern. Mit vier Hinweisen kannst du den Fall lösen. Alle weiteren Aufgaben kannst du frei spielen.</p>
+<ul id="clues" aria-label="Gesicherte Hinweise"></ul>
+<button id="verdict" class="primary" disabled>Fall lösen</button>
 <nav aria-label="Stationen" id="stations"></nav>
 <div class="layout">
 <section class="viewport" aria-label="Vorschaufenster">
 <div class="hud"><span id="scene-label"></span><span id="counter"></span></div>
 <p id="route-brief" tabindex="-1" hidden></p>
-<div class="stars"></div>
-<div class="planet"></div>
-<div id="scene"><div class="orbit"></div><div id="ship" aria-hidden="true"><svg viewBox="0 0 160 100"><path d="M45 28 19 9 21 37 0 50 21 63 19 91 45 72 111 72 156 50 111 28Z" fill="#b8ff78" stroke="#0e2117" stroke-width="4"/><path d="M48 37h62l23 13-23 13H48z" fill="#243f39"/><path d="M30 44h13v12H30z" fill="#fff9c5"/></svg></div><div id="scenery"></div></div>
+<div id="scene">
+ <svg id="machine" viewBox="0 0 460 235" role="img" aria-label="Aufbau mit Rampe, Kugel, Becher, Dominosteinen, Wagen und Vorhang.">
+  <path d="M25 186H438M48 61l116 69h83" fill="none" stroke="#796758" stroke-width="6" stroke-linecap="round"/>
+  <path d="M355 25h77v161h-77z" fill="#673d51"/>
+  <path d="M369 25v161m16-161v161m16-161v161m16-161v161" stroke="#8d5266" stroke-width="3"/>
+  <circle id="ball" cx="48" cy="49" r="12" fill="#ffce72"/>
+  <path id="cup" d="M179 94h36l-6 36h-24z" fill="#78c9b1"/>
+  <g fill="#f5a38e"><rect class="domino" x="232" y="102" width="11" height="28" rx="2"/><rect class="domino" x="250" y="102" width="11" height="28" rx="2"/><rect class="domino" x="268" y="102" width="11" height="28" rx="2"/></g>
+  <g id="cart"><path d="M275 164h63v12h-63z" fill="#78c9b1"/><circle cx="287" cy="180" r="6" fill="#ffce72"/><circle cx="326" cy="180" r="6" fill="#ffce72"/><path d="M294 126h25q0 19-9 20v9h8v6h-24v-6h8v-9q-8-1-8-20z" fill="#ffce72"/></g>
+ </svg>
+ <div id="token" aria-hidden="true">●</div><div id="scenery"></div>
+</div>
+<button id="replay" hidden>Aufnahme abspielen</button>
 <div id="scene-caption"></div>
 </section>
 <section class="console" aria-labelledby="mission-title">
 <div class="eyebrow" id="code"></div>
 <h2 id="mission-title" tabindex="-1"></h2>
-<p id="brief"></p>
+<blockquote id="source"></blockquote><p id="brief"></p>
 <div id="controls"></div>
 <div id="feedback" role="status" aria-live="polite"></div>
 <div class="actions"><button id="hint">Hinweis</button><button id="check" class="primary">Antwort prüfen</button><button id="next" class="primary" hidden>Weiter →</button></div>
@@ -39,9 +51,15 @@
 </div>
 <dialog id="book"><form method="dialog"><button class="close" aria-label="Schliessen">×</button></form><h2>Spielhilfe</h2>
 <p><strong>Zeitform und Perspektive.</strong> Stelle das Tempus und die Perspektive ein. Aktiv rückt Handelnde ins Zentrum, Vorgangspassiv den Vorgang, Zustandspassiv das Ergebnis.</p>
-<p><strong>Verbformen.</strong> Wähle die zum Funkspruch passende Verbform. Der Indikativ stellt etwas als wirklich dar, Konjunktiv I dient oft der indirekten Rede, Konjunktiv II etwa Wünschen und Irrealem. Der Imperativ fordert auf.</p>
+<p><strong>Verbformen.</strong> Wähle die zur Aussage passende Verbform. Der Indikativ stellt etwas als wirklich dar, Konjunktiv I dient oft der indirekten Rede, Konjunktiv II etwa Wünschen und Irrealem. Der Imperativ fordert auf.</p>
 <p><strong>Deklination.</strong> Kombiniere Kasus, Begleiter, Adjektivendung und Nomen. Nach «ein» muss das Adjektiv etwa in «ein schwerer Koffer» die Endung tragen.</p>
-<p><strong>Präpositionen.</strong> Steuere den Kurier zu einem markierten Feld. Bei Wechselpräpositionen steht der Akkusativ für ein Ziel, der Dativ für den Ort. Auch eine Bewegung kann am selben Ort stattfinden.</p>
+<p><strong>Präpositionen.</strong> Markiere ein Feld auf der Skizze. Bei Wechselpräpositionen steht der Akkusativ für ein Ziel, der Dativ für den Ort. Auch eine Bewegung kann am selben Ort stattfinden.</p>
 <p>Alle Schalter funktionieren mit Maus, Touch und Tastatur. Dein Fortschritt bleibt in diesem Browser gespeichert, sofern der Browser lokalen Speicher erlaubt.</p></dialog>
+<dialog id="case-file">
+<form method="dialog"><button class="close" aria-label="Schliessen">×</button></form>
+<h2>Was ist mit dem Pokal passiert?</h2>
+<div id="deduction"></div>
+<p id="resolution" role="status"></p>
+</dialog>
 </body>
 </html>

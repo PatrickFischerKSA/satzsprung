@@ -1,18 +1,12 @@
-# Satzsprung
+# Satzsprung · Der verschwundene Pokal
 
-Ein deutschsprachiges Browser-Lernspiel. Auf einer beschädigten Orbitalstation lassen sich Grammatikregeln als Schalterstellungen, Frachtschilder und Flugmanöver ausprobieren.
+Ein Grammatikkrimi im Browser. Vier Hinweise führen zur Lösung, und die animierte Kettenreaktion zeigt, was mit dem Pokal passiert ist.
 
-**Lokal spielen** · `index.html` direkt im Browser öffnen. Das Spiel benötigt keine Installation und funktioniert offline.
+- **Aufnahme** · Sechs Indikativzeiten in Aktiv, Vorgangs- und Zustandspassiv.
+- **Befragung** · Konjunktiv I und II, Imperativ, Infinitiv und Partizipien.
+- **Spurensicherung** · Vier Fälle, Begleiter, Adjektivendungen und Nomenflexion.
+- **Aufbau** · Neun Wechselpräpositionen und Beispiele mit festem Kasus.
 
-**GitHub Pages** · Den Inhalt dieses Ordners in ein GitHub-Repository übernehmen. Unter **Settings → Pages** den Branch auswählen, der die Dateien enthält, und als Ordner **/ (root)** setzen. Alle Assets verwenden relative Pfade.
+Die erste Aufgabe jedes Bereichs gibt einen Hinweis. Insgesamt gibt es 62 Aufgaben. Der Browser speichert den Fortschritt lokal.
 
-## Stationen
-
-- **Zeitmaschine** · Sechs Indikativzeiten, jeweils in Aktiv, Vorgangspassiv und Zustandspassiv. Die Schalter verändern den Funkspruch und die Ansicht des Schiffs.
-- **Formlabor** · Beispiele zu Konjunktiv I und II, Imperativ, Infinitiven, Partizipien, Stammwechsel und Hilfsverbwahl.
-- **Frachtkammer** · Alle vier Fälle, drei Genera und Plural, starke, schwache und gemischte Adjektivflexion sowie ausgewählte Nomenflexionen.
-- **Raumschleuse** · Alle neun Wechselpräpositionen sowie Beispiele für Präpositionen mit festem Kasus und für verschiedene Bedeutungsbeziehungen.
-
-Alle Stationen sind frei anwählbar. Richtige Lösungen bleiben lokal im Browser gespeichert. Bei Fehlern zeigt das Spiel, welche Schalter oder Kartenfelder überprüft werden sollen. Hinweise und Erklärungen ergänzen die Manöver.
-
-Die Missionen stehen in `missions.js`. Darstellung und Interaktion sind in `style.css` und `game.js` getrennt.
+Zum Offline-Spielen `index.html` öffnen. Für GitHub Pages die Dateien ins Repository übernehmen und unter **Settings → Pages** den Branch und **/ (root)** auswählen.
