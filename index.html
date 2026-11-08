@@ -11,18 +11,13 @@
 <div class="shell">
 <header><a href="./" class="brand">IM FALL DER FÄLLE</a><button id="manual">Spielhilfe</button></header>
 <main>
-<div class="eyebrow">FALL 01 / DER VERSCHWUNDENE POKAL</div>
+<div class="eyebrow">BAKER STREET 221B · DER VERSCHWUNDENE POKAL</div>
 <h1>Im Fall der <em>Fälle</em></h1>
 <p class="intro">Beim Festessen verschwindet der Pokal. Hinter dem Vorhang klappert es. Ada spricht von Diebstahl. Noah behauptet, er habe bloss die Tür geöffnet.</p>
-<details class="role"><summary>Verdeckte Rollenkarte öffnen</summary><strong>Du leitest die Ermittlungen.</strong> Frag zuerst nach den Spuren. Am Ende leitest du die Abstimmung. Spielt ihr am selben Tisch, lest Ada und Noahs Aussagen mit verteilten Rollen vor.</details>
 <ol id="rounds" aria-label="Ablauf des Krimidinners">
 <li>01 · Spurensuche</li><li>02 · Nachtprotokoll</li><li>03 · Abstimmung</li>
 </ol>
 <p id="round-guide" class="intro" aria-live="polite"></p>
-<ul id="clues" aria-label="Gesicherte Hinweise"></ul>
-<button id="night" class="primary" hidden>Nachtprotokoll öffnen</button>
-<button id="verdict" class="primary" disabled>Fall lösen</button>
-<nav aria-label="Stationen" id="stations"></nav>
 <div class="layout">
 <section class="viewport" aria-label="Vorschaufenster">
 <div class="hud"><span id="scene-label"></span><span id="counter"></span></div>
@@ -51,10 +46,17 @@
 <div class="actions"><button id="hint">Hinweis</button><button id="check" class="primary">Antwort prüfen</button><button id="next" class="primary" hidden>Weiter →</button></div>
 </section>
 </div>
+<section class="casebook" aria-labelledby="casebook-title">
+<h2 id="casebook-title">Holmes’ Fallakte</h2>
+<ul id="clues" aria-label="Gesicherte Spuren"></ul>
+<div class="actions"><button id="night" class="primary" hidden>Nachtprotokoll öffnen</button><button id="verdict" class="primary" disabled>Zur Abstimmung</button></div>
+</section>
+<nav aria-label="Alle Übungen" id="stations"></nav>
 </main>
 <footer><span>IM FALL DER FÄLLE</span><span id="progress"></span></footer>
 </div>
 <dialog id="book"><form method="dialog"><button class="close" aria-label="Schliessen">×</button></form><h2>Spielhilfe</h2>
+<p>Du leitest die Ermittlungen. Spielt ihr gemeinsam, könnt ihr Ada und Noahs Aussagen mit verteilten Rollen vorlesen.</p>
 <p><strong>Zeitform und Perspektive.</strong> Stelle das Tempus und die Perspektive ein. Aktiv rückt Handelnde ins Zentrum, Vorgangspassiv den Vorgang, Zustandspassiv das Ergebnis.</p>
 <p><strong>Verbformen.</strong> Wähle die zur Aussage passende Verbform. Der Indikativ stellt etwas als wirklich dar, Konjunktiv I dient oft der indirekten Rede, Konjunktiv II etwa Wünschen und Irrealem. Der Imperativ fordert auf.</p>
 <p><strong>Die vier Fälle.</strong> Frag «Wer oder was?» (Nominativ), «Wen oder was?» (Akkusativ), «Wem?» (Dativ) und «Wessen?» (Genitiv). Kombiniere Kasus, Begleiter, Adjektivendung und Nomen. Nach «ein» muss das Adjektiv etwa in «ein schwerer Koffer» die Endung tragen.</p>

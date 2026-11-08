@@ -64,7 +64,7 @@ function nav() {
  get('night').hidden = round !== 1;
  get('verdict').disabled = !canVote();
  get('round-guide').textContent = [
-  'Am Tisch. Sichere unter «Vier Fälle» die vier Spuren.',
+  'Sichere vier Spuren. Wähle bei jeder Frage den Fall und die passende Wortgruppe.',
   'Das Licht geht aus. Öffne das Nachtprotokoll und verbinde die Aussagen zu einem Ablauf.',
   'Das Licht geht wieder an. Legt eure Erklärung zur Abstimmung vor.'
  ][round];
@@ -86,7 +86,7 @@ function render() {
  scene.className = 'station-'+station;
  get('scene-label').textContent = stations[station].name.toUpperCase();
  get('counter').textContent = String(index+1).padStart(2,'0')+' / '+stations[station].missions.length;
- get('code').textContent = 'AUFGABE '+(station+1)+'.'+(index+1);
+ get('code').textContent = m.clue ? 'SPUR '+(index+1)+' VON '+clues.length : 'AUFGABE '+(index+1);
  get('mission-title').textContent = m.title;
  get('brief').textContent = m.brief;
  get('source').textContent = m.sample || m.title;
@@ -128,8 +128,8 @@ function render() {
   scenery.append(bubble);
  } else if (station === 2) {
   const tag = document.createElement('div');
-  tag.className = 'evidence';
-  tag.textContent = 'BEWEISSTÜCK '+String(index+1).padStart(2,'0');
+  tag.className = m.clue ? 'speech' : 'evidence';
+  tag.textContent = m.clue ? ['Holmes: «Beginnen wir mit dem Auslöser.»','Watson: «Was geriet als Erstes ins Kippen?»','Holmes: «Folgen wir dem Stoss.»','Watson: «Jetzt fehlt uns die Ladung.»'][index] : 'BEWEISSTÜCK '+String(index+1).padStart(2,'0');
   scenery.append(tag);
  }
  get('controls').replaceChildren(...m.fields.map(([label,options],i) => {
@@ -146,7 +146,7 @@ function render() {
    };
    const part = button(option, install);
    part.setAttribute('aria-pressed','false');
-   if (station===2 && matchMedia('(pointer: fine)').matches) {
+   if (station===2 && !m.clue && matchMedia('(pointer: fine)').matches) {
     part.draggable = true;
     part.addEventListener('dragstart',event => {
      if (locked) { event.preventDefault(); return; }
@@ -167,7 +167,7 @@ function caption() {
  const display = [
   () => forms[selected[0]]?.[selected[1]] || 'Wähle Perspektive und Zeitstufe.',
   () => words[0] ? m.sample + '  →  ' + words[0] : m.sample,
-  () => [words[1] === '—' ? '' : words[1],m.stem+(words[2] || '…'),words[3]].filter(Boolean).join(' '),
+  () => m.clue ? words[1] || 'Deine Wortgruppe erscheint hier.' : [words[1] === '—' ? '' : words[1],m.stem+(words[2] || '…'),words[3]].filter(Boolean).join(' '),
   () => (places.find(([value]) => value===spot)?.[1] || 'Wähle ein Feld auf der Karte.') + (words[0] && words[1] ? ' · '+words.join(' / ') : '')
  ,() => words.every(Boolean) ? m.sentence(words) : 'Wähle eine Verbform und ein Bindewort.'
  ][station]();
@@ -183,7 +183,9 @@ function check() {
  if (locked) return;
  const m = mission();
  if (selected.includes(null) || (m.spot && !spot)) {
-  feedback(m.spot ? 'Wähle ein Kartenfeld, eine Präposition und einen Kasus.' : 'Wähle in jeder Zeile eine Antwort.','warn');
+  const missing = m.fields.filter((_,i) => selected[i]===null).map(([label]) => label);
+  if (m.spot && !spot) missing.unshift('Kartenfeld');
+  feedback('Noch offen: '+missing.join(', ')+'.','warn');
   return;
  }
  const wrong = m.fields.filter((_,i) => selected[i] !== m.answer[i]).map(([label]) => label);
@@ -201,6 +203,7 @@ function check() {
  feedback('Richtig. '+m.hint+(m.clue ? ' Spur gesichert: '+m.clue : ''),'good');
  get('check').hidden = get('hint').hidden = true;
  get('next').hidden = false;
+ if (m.clue) get('next').textContent = 'Nächste Spur →';
  if (m.clue && allClues()) get('next').textContent = canVote() ? 'Zur Abstimmung →' : 'Licht aus →';
  if (station===4 && canVote()) get('next').textContent = 'Zur Abstimmung →';
  get('controls').querySelectorAll('button').forEach(item => item.disabled = true);

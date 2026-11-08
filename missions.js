@@ -54,6 +54,16 @@ const cargo = [
  ['Wem gilt der Dank?','kein','müde','Ärztin',2,'keiner','en','Ärztin','Femininer Dativ mit «kein»: «keiner müden Ärztin».'],
  ['Was benötigt das Labor? (Plural)','ohne Artikel','neu','Filter',1,'—','e','Filter','Ohne Artikel trägt das Adjektiv im Akkusativ Plural die Endung -e.']
 ].map(([title, article, stem, noun, k, det, end, flex, hint, clue]) => {
+ if (clue) {
+  const phrases = [
+   ['die rote Kugel','der roten Kugel','den roten Kugeln'],
+   ['dem leichten Becher','den leichten Becher','der leichte Becher'],
+   ['den kleinen Wagen','des kleinen Wagens','dem kleinen Wagen'],
+   ['des kleinen Wagens','der kleine Wagen','dem kleinen Wagen']
+  ];
+  return {title,brief:'Wähle den Fall und die passende Wortgruppe.',hint,clue,
+   fields:[['1 · Fall',cases],['2 · Wortgruppe',phrases[k]]],answer:[k,[0,1,2,0][k]]};
+ }
  const determinants = {'der':['der','den','dem','des'],'die':['die','der','den','denen'],'ein':['ein','eine','einen','einem'],'kein':['keine','keiner','keinem','keinen'],'ohne Artikel':['—']}[article];
  const nouns = [...new Set([noun,flex,noun+'n',noun+'s'])];
  const endings = ['e','en','er','es','em'];

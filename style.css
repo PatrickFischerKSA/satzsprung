@@ -91,3 +91,29 @@ h1{max-width:12ch;text-wrap:balance}
  #clues{grid-template-columns:1fr}
  #rounds li{font-size:.69rem;padding:7px 9px}
 }
+
+/* Baker Street dossier */
+body{background:radial-gradient(ellipse at 76% 0,#3b4b3f,transparent 65%),#17231e}
+header{border-bottom-color:#aa925e}
+main{padding-top:24px}
+h1{font-size:clamp(2.65rem,6vw,4.75rem);max-width:none;margin-bottom:10px}
+.intro{margin:9px 0 13px}
+#rounds{margin-top:14px}
+.layout{grid-template-columns:minmax(0,1fr) minmax(0,1.25fr)}
+.console,.casebook{background:#f3e6cd;color:#29271f;border:1px solid #bda77e}
+.console{padding:clamp(16px,2.5vw,30px)}
+.console #brief,.console legend{color:#514a38}
+.console .eyebrow{color:#654723}
+.console button:not(.primary):not([aria-pressed=true]){background:#fff5e1;color:#29271f;border-color:#a38b60}
+.console button[aria-pressed=true]{background:#294637;color:#fff6db;border-color:#294637}
+.console .warn{color:#8c321e}
+.console .good{color:#285742}
+.casebook{margin-top:14px;border-radius:10px;padding:14px 18px}
+.casebook h2{font-size:1.45rem}
+.casebook #clues li{color:#3e392d;background:#fffaeb;border-color:#a38b60}
+.casebook #verdict:disabled{opacity:1;background:#e4d3ad;color:#675c45;border-color:#bda77e}
+.station-2 .speech{font-family:Georgia,serif;font-size:1.35rem;box-shadow:4px 6px 0 #171d18}
+@media(max-width:850px){
+ .layout{grid-template-columns:1fr}
+ .layout:has(.station-2) #scene{min-height:112px}
+}
