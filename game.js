@@ -62,7 +62,7 @@ function nav() {
  get('clues').replaceChildren(...clueOrder.map(i => {
   const clue = clues[i];
   const item = document.createElement('li');
-  item.textContent = cases[i]+' · '+(solved.has(clueId(i)) ? clue.clue : 'Spur fehlt');
+  item.textContent = solved.has(clueId(i)) ? cases[i]+' · '+clue.clue : 'Spur noch offen';
   return item;
  }));
  const round = !allClues() ? 0 : nightComplete() ? 2 : 1;
@@ -94,6 +94,9 @@ function showCrimeScene() {
  get('brief').textContent = 'Untersuche das Bild mit der Lupe. Bei einem Fund öffnet sich die passende Aufgabe.';
  get('controls').replaceChildren();
  get('check').hidden = get('hint').hidden = true;
+ get('code').textContent = 'FESTSAAL AM HAFEN';
+ get('scene-label').textContent = 'TATORT';
+ get('counter').textContent = clues.filter((_,i)=>solved.has(clueId(i))).length+' / '+clues.length+' SPUREN';
  get('scene-caption').textContent = 'Festsaal am Hafen · Vier Spuren';
 }
 
@@ -166,7 +169,7 @@ function render() {
  scene.className = 'station-'+station;
  get('scene-label').textContent = stations[station].name.toUpperCase();
  get('counter').textContent = String(index+1).padStart(2,'0')+' / '+stations[station].missions.length;
- get('code').textContent = m.clue ? 'SPUR '+(index+1)+' VON '+clues.length : 'AUFGABE '+(index+1);
+ get('code').textContent = m.clue ? 'FUNDSTÜCK' : 'AUFGABE '+(index+1);
  get('mission-title').textContent = m.title;
  get('brief').textContent = m.brief;
  get('source').textContent = [m.sample,m.record].filter(Boolean).join('\n\n');
@@ -220,7 +223,9 @@ function render() {
   const order = [3,6,1,4,7,0,2,5];
   buildSequence(get('controls'),order.map(i=>cards[i]),4,picks=>{
    selected = m.fields.map((_,i)=>picks[i]?.row===i ? picks[i].column : null);
-   get('scene-caption').textContent = picks.length ? picks.map(card=>card.label).join(' / ') : 'Beleg → Hauptsatz → Bindewort → Nebensatz';
+   get('scene-caption').textContent = selected.includes(null)
+    ? 'Beleg → Hauptsatz → Bindewort → Nebensatz'
+    : picks[1].label+', '+picks[2].label+' '+picks[3].label;
    feedback('','');
   });
   get('scene-caption').textContent = 'Beleg → Hauptsatz → Bindewort → Nebensatz';
@@ -356,7 +361,7 @@ function buildSequence(container,cards,limit,onChange) {
  const buttons = cards.map(card => button(card.label,() => {
   picked.push(card);
   refresh();
-  (buttons.find(item=>!item.disabled) || line.querySelector('button:last-child'))?.focus();
+  (buttons.find(item=>!item.disabled) || line.querySelector('.sequence-card'))?.focus();
  }));
  bank.append(...buttons);
  container.replaceChildren(line,bank);
@@ -364,11 +369,27 @@ function buildSequence(container,cards,limit,onChange) {
   line.replaceChildren(...Array.from({length:limit},(_,i) => {
    const item = document.createElement('li');
    if (!picked[i]) item.textContent = 'Karte wählen';
-   else item.append(button(picked[i].label+' ×', () => {
-    const [removed] = picked.splice(i,1);
-    refresh();
-    buttons[cards.indexOf(removed)].focus();
-   }));
+   else {
+    const card = picked[i];
+    const remove = button(card.label+' ×', () => {
+     picked.splice(i,1);
+     refresh();
+     buttons[cards.indexOf(card)].focus();
+    }, 'sequence-card');
+    remove.setAttribute('aria-label',card.label+' zurücklegen');
+    item.append(remove);
+    for (const [offset,arrow,label] of [[-1,'↑','nach oben'],[1,'↓','nach unten']]) {
+     const target = i+offset;
+     const move = button(arrow, () => {
+      [picked[i],picked[target]] = [picked[target],picked[i]];
+      refresh();
+      line.children[target].querySelector('.sequence-card').focus();
+     }, 'sequence-move');
+     move.setAttribute('aria-label',card.label+' '+label+' verschieben');
+     move.disabled = target < 0 || target >= picked.length;
+     item.append(move);
+    }
+   }
    return item;
   }));
   buttons.forEach((item,i) => {item.disabled = picked.length===limit || picked.includes(cards[i]);});

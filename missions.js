@@ -70,9 +70,9 @@ const cargo = [
     explanation:'«Die rote Kugel» ist das Subjekt. Bei «die roten Kugeln» müsste es «stiessen» heissen. Die erste Wortgruppe ist hier das Akkusativobjekt.'
    },
    {
-    title:'Das erste Hindernis',sample:'Die rote Kugel kippte das leichte Trinkgefäss um.',
+    title:'Das erste Hindernis',sample:'Mit einem Ruck kippte die rote Kugel das leichte Trinkgefäss um.',
     brief:'Wähle die Wortgruppe für den Gegenstand, der umkippte. Bestimme ihren Kasus. Wähle die Form, die entsteht, wenn du «Trinkgefäss» durch «Becher» ersetzt.',
-    phrases:['die rote Kugel','das leichte Trinkgefäss','das Trinkgefäss'],
+    phrases:['die rote Kugel','das leichte Trinkgefäss','mit einem Ruck'],
     reasons:['Mit einem maskulinen Nomen lautet die Wortgruppe «der leichte Becher».','Der Artikel «das» zeigt eindeutig den Nominativ.','Mit einem maskulinen Nomen lautet die Wortgruppe «den leichten Becher».'],
     pick:1,reason:2,
     explanation:'«Das leichte Trinkgefäss» könnte der Form nach auch Nominativ sein. Die Ersatzprobe «den leichten Becher» macht den Akkusativ sichtbar.'
@@ -156,8 +156,8 @@ const links = [
  {
   title:'Was geschah vor dem Klappern?',
   sample:'Noah: «Das Klappern begann, bevor ich die Tür geöffnet hatte.» · Ada: «Die Tür war schon offen, als der Becher umkippte.»',
-  record:'Das Türprotokoll meldet 20.11 Uhr. Auf der Tonspur beginnt das Klappern um 20.12 Uhr.',
-  brief:'Prüfe Noahs Aussage über die Tür und das Klappern anhand der Zeitangaben. Lege zuerst den Beleg ab. Baue dann aus Hauptsatz, Bindewort und Nebensatz die belegte Reihenfolge. Verwende Präteritum im Hauptsatz und Plusquamperfekt im Nebensatz.',
+  record:'Türprotokoll, 20.11 Uhr: Noah öffnet die Tür. Tonspur, 20.12 Uhr: Das Klappern beginnt.',
+  brief:'Prüfe Noahs Aussage über die Tür und das Klappern anhand der Zeitangaben. Tippe zuerst die Belegkarte an. Tippe danach Hauptsatz, Bindewort und Nebensatz in dieser Reihenfolge an. Verwende Präteritum im Hauptsatz und Plusquamperfekt im Nebensatz.',
   fields:[['Beleg',['Türprotokoll und Tonspur','Foto des Wagens']],['Hauptsatz',['Das Klappern begannen','Das Klappern begann']],['Bindewort',['bevor','nachdem']],['Nebensatz',['Noah die Tür öffnete.','Noah die Tür geöffnet hatte.']]],
   answer:[0,1,1,1],
   hint:'Die Tür war um 20.11 Uhr offen. Das Klappern begann erst eine Minute später. «Nachdem» verbindet die Ereignisse in dieser Reihenfolge.'
