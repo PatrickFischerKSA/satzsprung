@@ -67,7 +67,7 @@ function nav() {
  get('night').hidden = round !== 1;
  get('verdict').disabled = !canVote();
  get('round-guide').textContent = [
-  'Tippe eine Lupe am Tatort an und sichere vier Spuren.',
+  'Suche mit der Lupe nach vier Spuren im Festsaal.',
   'Das Licht geht aus. Öffne das Nachtprotokoll und verbinde die Aussagen zu einem Ablauf.',
   'Das Licht geht wieder an. Legt eure Erklärung zur Abstimmung vor.'
  ][round];
@@ -84,32 +84,69 @@ function showCrimeScene() {
  index = 0;
  render();
  get('mission-title').textContent = 'Untersuche den Tatort';
- get('brief').textContent = 'Tippe eine Lupe im Bild an. Jede öffnet eine andere Spur mit einer kurzen Grammatikaufgabe.';
+ get('brief').textContent = 'Untersuche das Bild mit der Lupe. Bei einem Fund öffnet sich die passende Aufgabe.';
  get('controls').replaceChildren();
  get('check').hidden = get('hint').hidden = true;
  get('scene-caption').textContent = 'Festsaal am Hafen · Vier Spuren';
 }
 
-function drawClueMarkers() {
- const scene = get('crime-scene');
- scene.querySelectorAll('button').forEach(marker => marker.remove());
- const targets = [['Kugel',14,42],['Becher',40,48],['Wagen',69,78],['Foto am Vorhang',89,47]];
- targets.forEach(([name,x,y],i) => {
-  const secured = solved.has(clueId(i));
-  const marker = button('', () => {
-   station = 2;
-   index = i;
-   render();
-   focusMission();
-  },'clue-marker');
-  marker.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/></svg>';
-  marker.setAttribute('aria-label',name+(secured ? ' · Spur gesichert' : ' untersuchen'));
-  marker.title = name;
-  marker.dataset.secured = String(secured);
-  marker.style.left = x+'%';
-  marker.style.top = y+'%';
-  scene.append(marker);
- });
+const searchTargets = [
+ {name:'Kugel',x:14,y:42},
+ {name:'Becher',x:40,y:48},
+ {name:'Wagen',x:69,y:79},
+ {name:'Foto am Vorhang',x:89,y:47}
+];
+const searchLens = get('search-lens');
+let lensPosition = {x:50,y:30};
+let nearbyClue = -1;
+
+function positionLens(x,y) {
+ lensPosition = {x:Math.max(0,Math.min(100,x)),y:Math.max(0,Math.min(100,y))};
+ searchLens.style.setProperty('--lens-x',lensPosition.x+'%');
+ searchLens.style.setProperty('--lens-y',lensPosition.y+'%');
+ nearbyClue = searchTargets.findIndex(target =>
+  Math.hypot((target.x-lensPosition.x)*6.4,(target.y-lensPosition.y)*3.4) < 48
+ );
+ const status = get('search-status');
+ searchLens.dataset.found = String(nearbyClue >= 0);
+ const message = nearbyClue < 0 ? 'Suche nach einer Spur.' :
+  searchTargets[nearbyClue].name+(solved.has(clueId(nearbyClue)) ? ' · bereits gesichert' : ' · Spur entdeckt');
+ if (status.textContent !== message) status.textContent = message;
+}
+
+function positionLensAtPointer(event) {
+ const bounds = searchLens.getBoundingClientRect();
+ positionLens(100*(event.clientX-bounds.left)/bounds.width,100*(event.clientY-bounds.top)/bounds.height);
+}
+
+searchLens.addEventListener('pointerdown', event => {
+ if (event.button !== 0) return;
+ searchLens.setPointerCapture(event.pointerId);
+ positionLensAtPointer(event);
+});
+searchLens.addEventListener('pointermove', positionLensAtPointer);
+searchLens.addEventListener('pointerup', event => {
+ if (event.button !== 0) return;
+ positionLensAtPointer(event);
+ inspectNearbyClue();
+});
+searchLens.addEventListener('click', event => {
+ if (event.detail===0) inspectNearbyClue();
+});
+searchLens.addEventListener('keydown',event => {
+ const moves = {ArrowLeft:[-4,0],ArrowRight:[4,0],ArrowUp:[0,-6],ArrowDown:[0,6]};
+ const move = moves[event.key];
+ if (!move) return;
+ event.preventDefault();
+ positionLens(lensPosition.x+move[0],lensPosition.y+move[1]);
+});
+
+function inspectNearbyClue() {
+ if (nearbyClue < 0) return;
+ station = 2;
+ index = nearbyClue;
+ render();
+ focusMission();
 }
 
 function render() {
@@ -140,7 +177,8 @@ function render() {
  get('next').hidden = true;
  get('next').textContent = 'Weiter →';
  get('crime-scene').hidden = !m.clue;
- if (m.clue) drawClueMarkers();
+ get('search-status').hidden = get('search-instructions').hidden = !m.clue;
+ if (m.clue) positionLens(lensPosition.x,lensPosition.y);
  const scenery = get('scenery');
  scenery.replaceChildren();
  moveToken(50,50);
@@ -242,7 +280,7 @@ function check() {
  get('check').hidden = get('hint').hidden = true;
  get('next').hidden = false;
  if (m.clue) {
-  drawClueMarkers();
+  positionLens(lensPosition.x,lensPosition.y);
   get('next').textContent = 'Zurück zum Tatort';
  }
  if (m.clue && allClues()) get('next').textContent = canVote() ? 'Zur Abstimmung →' : 'Licht aus →';
@@ -255,7 +293,7 @@ function check() {
 function advance() {
  if (get('next').textContent==='Zurück zum Tatort') {
   showCrimeScene();
-  get('crime-scene').querySelector('[data-secured=false]')?.focus();
+  searchLens.focus();
   return;
  }
  if (get('next').textContent==='Zur Abstimmung →') {
@@ -346,7 +384,7 @@ dock.addEventListener('drop',event => {
  const [row,column] = payload.split('/').map(Number);
  get('controls').querySelectorAll('fieldset')[row]?.querySelectorAll('button')[column]?.click();
 });
-get('tatort').onclick = () => { showCrimeScene(); get('crime-scene').querySelector('button')?.focus(); };
+get('tatort').onclick = () => { showCrimeScene(); searchLens.focus(); };
 get('manual').onclick = () => get('book').showModal();
 get('hint').onclick = () => feedback(mission().hint,'warn');
 get('check').onclick = check;

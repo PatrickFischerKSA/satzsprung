@@ -131,12 +131,42 @@ h1{font-size:clamp(2.5rem,7vw,5.6rem);font-weight:400}
 .console button[aria-pressed=true]{background:#285254;border-color:#285254}
 #crime-scene{position:relative;width:100%}
 #crime-scene>svg{display:block;width:100%;height:auto}
-.clue-marker{position:absolute;translate:-50% -50%;display:grid;place-items:center;width:44px;height:44px;padding:8px;border-radius:50%;border:2px solid #f9e0aa;background:#213e42;color:#fff0cf;box-shadow:0 0 0 4px #17292c70}
-.clue-marker svg{width:22px;fill:none;stroke:currentColor;stroke-width:2.25;stroke-linecap:round}
-.clue-marker[data-secured=true]{background:#e0ecd7;color:#264b42;border-color:#90b6a0}
 #scene:has(#crime-scene:not([hidden])){min-height:0}
 @media(max-width:850px){
  .layout{grid-template-columns:1fr}
  .layout:has(#crime-scene:not([hidden])) .console{grid-row:2}
 }
 .header-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+
+#crime-scene{background:#111c27;isolation:isolate}
+#crime-scene>svg{filter:saturate(.82) contrast(1.1)}
+#search-lens{
+ --lens-x:50%;
+ --lens-y:30%;
+ --lens-radius:clamp(25px,6vw,54px);
+ position:absolute;
+ z-index:1;
+ inset:0;
+ width:100%;
+ height:100%;
+ border:0;
+ border-radius:0;
+ padding:0;
+ cursor:crosshair;
+ touch-action:none;
+ background:radial-gradient(circle at var(--lens-x) var(--lens-y),
+  transparent 0 calc(var(--lens-radius) - 2px),
+  #e6d5a8 calc(var(--lens-radius) - 1px) var(--lens-radius),
+  #071122b8 calc(var(--lens-radius) + 2px),#071122df);
+}
+#search-lens[data-found=true]{
+ cursor:zoom-in;
+ background:radial-gradient(circle at var(--lens-x) var(--lens-y),
+  transparent 0 calc(var(--lens-radius) - 3px),
+  #ffe299 calc(var(--lens-radius) - 2px) var(--lens-radius),
+  #071122b8 calc(var(--lens-radius) + 3px),#071122df);
+}
+#search-lens:focus-visible{outline-offset:-4px}
+#search-instructions,#search-status{margin:0;padding:8px 15px;font-size:.85rem}
+#search-instructions{color:var(--muted)}
+#search-status{color:var(--gold);font-weight:700;min-height:2.2em}
