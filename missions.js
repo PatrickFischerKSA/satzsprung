@@ -10,33 +10,38 @@ const timeRules = [
  ['«wird» + Partizip II','«wurde» + Partizip II','«ist» + Partizip II + «worden»','«war» + Partizip II + «worden»','«wird» + Partizip II + «werden»','«wird» + Partizip II + «worden sein»'],
  ['«ist» + Partizip II','«war» + Partizip II','«ist» + Partizip II + «gewesen»','«war» + Partizip II + «gewesen»','«wird» + Partizip II + «sein»','«wird» + Partizip II + «gewesen sein»']
 ];
+const recordingTasks = [
+ 'Formuliere den Satz so um, dass die Kugel als handelndes Subjekt genannt wird.',
+ 'Formuliere den Satz so um, dass er beschreibt, was mit dem Becher geschieht.',
+ 'Formuliere den Satz so um, dass er den gekippten Becher als Ergebnis beschreibt.'
+];
 const time = tenses.flatMap((tense, t) => [1,2,0].map(v => ({
  title: 'Die Aufnahme beschriften',
  sample: forms[v===0 ? 1 : 0][t],
- brief: 'Setze den Satz in die Form «'+voices[v]+'». Behalte die Zeitform bei ('+tense+').',
+ brief: recordingTasks[v]+' Wähle unter «Perspektive» die passende Form und unter «Zeitform» die Zeitform des Ausgangssatzes.',
  hint: tense + ' · ' + voices[v] + '. ' + timeRules[v][t],
- fields: [['Perspektive', voices], ['Zeitstufe', tenses]], answer: [v,t]
+ fields: [['Perspektive', voices], ['Zeitform', tenses]], answer: [v,t]
 })));
 
 const lab = [
- ['Aussage von Ada','Gib die Meldung indirekt im Konjunktiv I der Gegenwart weiter.','Ada sagt, der Pokal … auf dem Wagen.','stehe','steht','stünde','«Stehe» ist die Konjunktiv-I-Form von «stehen».'],
- ['Stimmen aus dem Archiv','Gib das Öffnen als bereits geschehen in indirekter Rede wieder. Verwende Konjunktiv I Aktiv.','Noah sagt, er … den Schrank …','habe · geöffnet','hätte · geöffnet','hat · geöffnet','Konjunktiv I Perfekt Aktiv: «habe» + Partizip II.'],
- ['Fremdes Signal','Gib eine bereits abgeschlossene Reparatur im Konjunktiv I Vorgangspassiv wieder.','Die Hauswartin meldet, die Kamera …','sei repariert worden','sei repariert','wäre repariert worden','Konjunktiv I Perfekt im Vorgangspassiv verwendet «sei … worden».'],
- ['Prognose','Gib die Prognose im Konjunktiv I Futur I Vorgangspassiv weiter.','Die Hauswartin meldet, die Kamera …','werde repariert werden','wird repariert werden','werde reparieren','«Werde» markiert den Konjunktiv I. «Repariert werden» ist der Passivinfinitiv.'],
- ['Zu wenig Zeit','Setze den irrealen Wunsch in den Konjunktiv II der Gegenwart.','Wenn Ada nur mehr Zeit …!','hätte','hat','habe','«Hätte» ist die Konjunktiv-II-Form von «haben».'],
- ['Zeitparadox','Die Rettung kam zu spät. Funke die irreale Alternative im Konjunktiv II der Vergangenheit, im Vorgangspassiv.','Ohne Störung … der Pokal …','wäre · gerettet worden','sei · gerettet worden','wäre · gerettet','«Wäre … worden» drückt hier einen irrealen Vorgang in der Vergangenheit aus.'],
- ['Sofortstart','Sprich eine einzelne Person mit du an. Verwende den Imperativ.','Dein Befehl an Noah','Lies den Code!','Lese den Code!','Lest den Code!','«Lesen» hat im Imperativ Singular den Stamm «lies».'],
- ['Doppelschicht','Sprich das ganze Team mit ihr an. Verwende den Imperativ.','Dein Befehl an das Team','Haltet euch fest!','Halte dich fest!','Halten Sie sich fest!','Die ihr-Form des Imperativs lautet «haltet».'],
- ['Handbuch','Wähle den erweiterten Infinitiv mit zu.','Ziel des Versuchs','das Signal abzufangen','das Signal zu abfangen','das Signal abgefangen','Bei «abfangen» steht «zu» zwischen Vorsilbe und Verbstamm.'],
- ['Warteschleife','Wähle den Infinitiv Perfekt Aktiv.','Ada behauptet, …','das Signal empfangen zu haben','das Signal zu empfangen','das Signal empfangen zu werden','Partizip II + «zu haben» drückt Vorzeitigkeit aus.'],
- ['Lebendes Signal','Wähle das Partizip I für einen Sender, der gerade blinkt.','Welcher Sender ist gemeint?','der blinkende Sender','der geblinkte Sender','der erloschene Sender','«Blinkend» entsteht aus Infinitiv + d. Als Adjektiv bekommt es eine Endung.'],
- ['Unter dem Tisch','Wähle das Partizip II für ein bereits verlorenes Objekt.','Welches Objekt wird gesucht?','die verlorene Kugel','die verlierende Kugel','die verlierbare Kugel','«Verloren» ist das Partizip II von «verlieren».'],
- ['Startprotokoll','Wähle die 2. Person Singular im Präsens.','Du … den Wagen zur Rampe.','fährst','fahrst','fahrt','«Fahren» wechselt in der 2. und 3. Person Singular von a zu ä.'],
- ['Zurück in der Aula','Wähle das Perfekt des Bewegungsverbs.','Wir … in die Aula zurückgekehrt.','sind','haben','werden','«Zurückkehren» bildet das Perfekt mit «sein».']
+ ['Aussage von Ada','Gib Adas Aussage in indirekter Rede im Konjunktiv I wieder. Wähle die Form von «stehen» für «Ada sagt, der Pokal … auf dem Wagen.»','Ada sagt: «Der Pokal steht auf dem Wagen.»','stehe','steht','stünde','«Stehe» ist die Konjunktiv-I-Form von «stehen».'],
+ ['Stimmen aus dem Archiv','Gib Noahs Aussage in indirekter Rede im Konjunktiv I Perfekt wieder. Wähle die beiden Verbteile für «Noah sagt, er … den Schrank …»','Noah sagt: «Ich habe den Schrank geöffnet.»','habe · geöffnet','hätte · geöffnet','hat · geöffnet','Konjunktiv I Perfekt Aktiv: «habe» + Partizip II.'],
+ ['Fremdes Signal','Wähle die Verbgruppe für die indirekte Rede nach «Die Hauswartin meldet, die Kamera …». Verwende Konjunktiv I Perfekt im Vorgangspassiv.','Die Hauswartin meldet: «Die Kamera ist repariert worden.»','sei repariert worden','sei repariert','wäre repariert worden','Konjunktiv I Perfekt im Vorgangspassiv verwendet «sei … worden».'],
+ ['Prognose','Wähle die Verbgruppe für die indirekte Rede nach «Die Hauswartin meldet, die Kamera …». Verwende Konjunktiv I Futur I im Vorgangspassiv.','Die Hauswartin meldet: «Die Kamera wird repariert werden.»','werde repariert werden','wird repariert werden','werde reparieren','«Werde» markiert den Konjunktiv I. «Repariert werden» ist der Passivinfinitiv.'],
+ ['Zu wenig Zeit','Formuliere aus dem Satz einen Wunsch. Wähle die Form von «haben» im Konjunktiv II für «Wenn Ada nur mehr Zeit …!»','Ada hat zu wenig Zeit.','hätte','hat','habe','«Hätte» ist die Konjunktiv-II-Form von «haben».'],
+ ['Zeitparadox','Wähle die Verbteile für «Ohne Störung … der Pokal …». Beschreibe, was hätte geschehen können. Verwende den Konjunktiv II der Vergangenheit im Vorgangspassiv.','Wegen einer Störung wurde der Pokal nicht gerettet.','wäre · gerettet worden','sei · gerettet worden','wäre · gerettet','«Wäre … worden» drückt hier einen irrealen Vorgang in der Vergangenheit aus.'],
+ ['Sofortstart','Wähle den Befehl, der Noah direkt mit der du-Form des Imperativs anspricht.','Noah soll den Code lesen.','Lies den Code!','Lese den Code!','Lest den Code!','«Lesen» hat im Imperativ Singular den Stamm «lies».'],
+ ['Doppelschicht','Wähle den Befehl, der die Teammitglieder direkt mit der ihr-Form des Imperativs anspricht.','Die Teammitglieder sollen sich festhalten.','Haltet euch fest!','Halte dich fest!','Halten Sie sich fest!','Die ihr-Form des Imperativs lautet «haltet».'],
+ ['Handbuch','Wähle die Infinitivgruppe mit «zu», die den Satz «Das Team versucht, …» vervollständigt.','Das Team will das Signal abfangen.','das Signal abzufangen','das Signal zu abfangen','das Signal abgefangen','Bei «abfangen» steht «zu» zwischen Vorsilbe und Verbstamm.'],
+ ['Warteschleife','Wähle die Infinitivgruppe nach «Ada behauptet, …». Das Empfangen ist bereits abgeschlossen.','Ada sagt: «Ich habe das Signal empfangen.»','das Signal empfangen zu haben','das Signal zu empfangen','das Signal empfangen zu werden','Partizip II + «zu haben» drückt Vorzeitigkeit aus.'],
+ ['Lebendes Signal','Wähle die Wortgruppe, die den Sender mit dem Partizip I von «blinken» beschreibt.','Der Sender blinkt.','der blinkende Sender','der geblinkte Sender','der erloschene Sender','«Blinkend» entsteht aus Infinitiv + d. Als Adjektiv bekommt es eine Endung.'],
+ ['Unter dem Tisch','Wähle die Wortgruppe, die die Kugel mit dem Partizip II von «verlieren» beschreibt.','Jemand hat die Kugel verloren.','die verlorene Kugel','die verlierende Kugel','die verlierbare Kugel','«Verloren» ist das Partizip II von «verlieren».'],
+ ['Startprotokoll','Ersetze «ich» durch «du» und wähle die passende Präsensform von «fahren».','Ich fahre den Wagen zur Rampe.','fährst','fahrst','fahrt','«Fahren» wechselt in der 2. und 3. Person Singular von a zu ä.'],
+ ['Zurück in der Aula','Setze den Satz ins Perfekt. Wähle das Hilfsverb für «Wir … in die Aula zurückgekehrt.»','Wir kehrten in die Aula zurück.','sind','haben','werden','«Zurückkehren» bildet das Perfekt mit «sein».']
 ].map(([title, brief, sample, correct, first, second, hint], index) => {
  const options = [correct,first,second];
  const offset = index % options.length;
- return {title,brief,sample,hint,fields:[['Funkkanal',options.slice(offset).concat(options.slice(0,offset))]],answer:[(3-offset)%3]};
+ return {title,brief,sample,hint,fields:[['Antwort',options.slice(offset).concat(options.slice(0,offset))]],answer:[(3-offset)%3]};
 });
 
 const cases = ['Nominativ','Akkusativ','Dativ','Genitiv'];
@@ -53,28 +58,28 @@ const cargo = [
  ['Was dient als Treibstoff?','ohne Artikel','kalt','Gas',0,'—','es','Gas','Ohne Artikel trägt das Adjektiv im Nominativ Neutrum die starke Endung -es.'],
  ['Wem gilt der Dank?','kein','müde','Ärztin',2,'keiner','en','Ärztin','Femininer Dativ mit «kein»: «keiner müden Ärztin».'],
  ['Was benötigt das Labor? (Plural)','ohne Artikel','neu','Filter',1,'—','e','Filter','Ohne Artikel trägt das Adjektiv im Akkusativ Plural die Endung -e.']
-].map(([title, article, stem, noun, k, det, end, flex, hint, clue]) => {
+].map(([title, article, stem, noun, k, det, end, flex, hint, clue], cargoExerciseIndex) => {
  if (clue) {
   const reports = [
    {
     title:'Der Stoss gegen den Becher',sample:'Den leichten Becher stiess vor dem Klappern die rote Kugel an.',
     brief:'Welche Wortgruppe nennt das, was den Becher anstösst? Bestimme ihren Kasus und begründe deine Wahl.',
     phrases:['den leichten Becher','vor dem Klappern','die rote Kugel'],
-    reasons:['Die Wortgruppe steht am Satzanfang.','Das Verb steht in der Einzahl und richtet sich nach dieser Wortgruppe.','Die Präposition «vor» verlangt hier den Dativ.'],
+    reasons:['Die Wortgruppe steht am Satzanfang.','Setzt man diese Wortgruppe in den Plural, muss auch das Verb im Plural stehen.','Die Präposition «vor» verlangt hier den Dativ.'],
     pick:2,reason:1,
     explanation:'«Die rote Kugel» ist das Subjekt. Bei «die roten Kugeln» müsste es «stiessen» heissen. Die erste Wortgruppe ist hier das Akkusativobjekt.'
    },
    {
     title:'Das erste Hindernis',sample:'Die rote Kugel kippte das leichte Trinkgefäss um.',
-    brief:'Wähle die Wortgruppe für den Gegenstand, der umkippte. Bestimme ihren Kasus und prüfe ihn mit einer Ersatzprobe.',
-    phrases:['die rote Kugel','das leichte Trinkgefäss','im Protokoll'],
+    brief:'Wähle die Wortgruppe für den Gegenstand, der umkippte. Bestimme ihren Kasus. Wähle die Form, die entsteht, wenn du «Trinkgefäss» durch «Becher» ersetzt.',
+    phrases:['die rote Kugel','das leichte Trinkgefäss','das Trinkgefäss'],
     reasons:['Mit einem maskulinen Nomen lautet die Wortgruppe «der leichte Becher».','Der Artikel «das» zeigt eindeutig den Nominativ.','Mit einem maskulinen Nomen lautet die Wortgruppe «den leichten Becher».'],
     pick:1,reason:2,
-    explanation:'«Die leichte Tasse» könnte der Form nach auch Nominativ sein. Die Ersatzprobe «den leichten Becher» macht den Akkusativ sichtbar.'
+    explanation:'«Das leichte Trinkgefäss» könnte der Form nach auch Nominativ sein. Die Ersatzprobe «den leichten Becher» macht den Akkusativ sichtbar.'
    },
    {
     title:'Die Richtung des Stosses',sample:'Hinter dem Tisch versetzten die Dominosteine dem kleinen Wagen einen Stoss.',
-    brief:'Wähle die Wortgruppe für das Ziel des Stosses. Bestimme ihren Kasus und unterscheide sie von der Ortsangabe.',
+    brief:'Welche Wortgruppe nennt das, was den Stoss abbekommt? Bestimme ihren Kasus und wähle die passende Begründung.',
     phrases:['dem kleinen Wagen','hinter dem Tisch','einen Stoss'],
     reasons:['«Jemandem einen Stoss versetzen» verlangt für das Ziel ein Dativobjekt.','«Hinter» verlangt hier den Dativ für den Ort.','«Einen» zeigt den maskulinen Akkusativ an.'],
     pick:0,reason:0,
@@ -82,7 +87,7 @@ const cargo = [
    },
    {
     title:'Die Ladung im Foto',sample:'Neben der Tür lag ein Foto der Ladefläche. Darauf sah man den Inhalt des kleinen Wagens.',
-    brief:'Wähle die Wortgruppe, die angibt, zu welchem Gegenstand der Inhalt gehörte. Bestimme ihren Kasus und ihre Funktion.',
+    brief:'Beziehe dich auf den zweiten Satz. Welche Wortgruppe sagt, wozu der Inhalt gehört? Bestimme ihren Kasus und wähle, von welchem Nomen sie abhängt.',
     phrases:['neben der Tür','der Ladefläche','des kleinen Wagens'],
     reasons:['Sie hängt von «Foto» ab und benennt dessen Motiv.','Sie hängt vom Nomen «Inhalt» ab und gibt an, wozu der Inhalt gehört.','Sie hängt unmittelbar vom Verb «sah» ab.'],
     pick:2,reason:1,
@@ -98,7 +103,13 @@ const cargo = [
  const determinants = {'der':['der','den','dem','des'],'die':['die','der','den','denen'],'ein':['ein','eine','einen','einem'],'kein':['keine','keiner','keinem','keinen'],'ohne Artikel':['—']}[article];
  const nouns = [...new Set([noun,flex,noun+'n',noun+'s'])];
  const endings = ['e','en','er','es','em'];
- return {title,brief:'Beantworte die Frage mit dieser Wortgruppe. Wähle Kasus, Begleiter, Adjektivendung und Nomen. Grundform: '+[article,stem,noun].join(' · '),hint,stem,clue,
+ const sentenceFrames = [
+  '… nimmt die Bilder auf.', 'Die Crew repariert …', 'Der Pilot hilft …',
+  'Das Signal … fehlt.', 'Die Crew sieht …', '… dient als Treibstoff.',
+  'Der Dank gilt …', 'Das Labor benötigt …'
+ ];
+ return {title:'Wortgruppe einsetzen',sample:sentenceFrames[cargoExerciseIndex-4],
+  brief:'Ergänze die Lücke mit diesen Bausteinen: '+[article,stem,noun].join(' · ')+'. Wähle den Kasus und passe Begleiter, Adjektivendung und Nomen an.',hint,stem,clue,
  fields:[['Welcher Fall beantwortet die Frage?',cases],['Begleiter',determinants],['Endung',endings],['Nomen',nouns]],answer:[k,determinants.indexOf(det),endings.indexOf(end),nouns.indexOf(flex)]};
 });
 
@@ -121,8 +132,16 @@ const routes = [
  ['ohne','Noah trägt den Becher ohne die Schachtel weg.','ohne die Schachtel','«Ohne» verlangt den Akkusativ.','innen',1],
  ['seit','Die Kamera läuft seit einer Stunde.','seit einer Stunde','«Seit» verlangt den Dativ und kennzeichnet einen Zeitraum bis jetzt.','oben',2],
  ['trotz','Trotz der Wand erkennt Ada den Wagen auf dem Bild.','trotz der Wand','«Trotz» steht hier mit Genitiv und nennt den Gegengrund.','wand',3]
-].map(([prep,brief,sample,hint,spot,k]) => ({
- title:'Den Aufbau prüfen',brief:'Markiere auf der Skizze das Feld zum Satz. Wähle die Präposition und den Kasus ihrer Wortgruppe.',sample:brief,result:sample,hint,
+].map(([prep,sentence,sample,hint,spot,k],index) => ({
+
+ title:'Den Aufbau prüfen',brief:'Suche im Satz die Angabe '+[
+  'zum Ziel des Bechers','zum Ziel der Kugel','zum Ort der Kreisbewegung','zum Ziel der Kugel',
+  'zum Ort der Kugel','zum Ziel der Schachtel','zum Standort der Kamera','zum Ziel der Lampe',
+  'zum Standort des Wagens','zum Ziel des Wagens','zum Ziel des Wagens','zum Weg der Kugel',
+  'zum Ausgangspunkt der Kugel','zum Grund für den Halt','zum Hilfsmittel',
+  'zum Gegenstand, den Noah nicht mitnimmt','zur bisherigen Laufzeit der Kamera','zum Hindernis'
+ ][index]+'. '+(index===16 ? 'Markiere auf der Skizze das Gerät, dessen Laufzeit genannt wird.' : 'Markiere auf der Skizze die zugehörige Position oder den Gegenstand.')+' Wähle dann ihre Präposition und den Kasus der zugehörigen Wortgruppe.',
+ sample:sentence,result:sample,hint,
  fields:[['Präposition',[...new Set(['in','auf','unter','über','neben','vor','hinter','zwischen','an',prep])]],['Kasus',cases]],
  answer:[['in','auf','unter','über','neben','vor','hinter','zwischen','an',prep].indexOf(prep),k],spot
 }));
@@ -138,7 +157,7 @@ const links = [
   title:'Was geschah vor dem Klappern?',
   sample:'Noah: «Das Klappern begann, bevor ich die Tür geöffnet hatte.» · Ada: «Die Tür war schon offen, als der Becher umkippte.»',
   record:'Das Türprotokoll meldet 20.11 Uhr. Auf der Tonspur beginnt das Klappern um 20.12 Uhr.',
-  brief:'Lege zuerst den entscheidenden Beleg ab. Baue dann den korrigierten Satz im Präteritum mit einem Nebensatz im Plusquamperfekt.',
+  brief:'Prüfe Noahs Aussage über die Tür und das Klappern anhand der Zeitangaben. Lege zuerst den Beleg ab. Baue dann aus Hauptsatz, Bindewort und Nebensatz die belegte Reihenfolge. Verwende Präteritum im Hauptsatz und Plusquamperfekt im Nebensatz.',
   fields:[['Beleg',['Türprotokoll und Tonspur','Foto des Wagens']],['Hauptsatz',['Das Klappern begannen','Das Klappern begann']],['Bindewort',['bevor','nachdem']],['Nebensatz',['Noah die Tür öffnete.','Noah die Tür geöffnet hatte.']]],
   answer:[0,1,1,1],
   hint:'Die Tür war um 20.11 Uhr offen. Das Klappern begann erst eine Minute später. «Nachdem» verbindet die Ereignisse in dieser Reihenfolge.'
@@ -147,7 +166,7 @@ const links = [
   title:'Wann stand der Pokal auf dem Wagen?',
   sample:'Ada: «Der Pokal wurde erst nach dem Sturz des Bechers auf den Wagen gestellt.» · Noah: «Der Pokal stand schon vorher darauf.»',
   record:'Das Foto von 20.10 Uhr zeigt den Pokal auf dem Wagen und die Kugel noch am oberen Ende der Rampe. Der Becher fiel um 20.12 Uhr.',
-  brief:'Wähle den Beleg und baue einen Satz im Präteritum, der die Reihenfolge festhält.',
+  brief:'Prüfe Adas Behauptung über den Pokal anhand der Zeitangaben. Lege den Beleg ab und setze aus Hauptsatz, Bindewort und Nebensatz zusammen, wann der Pokal auf dem Wagen stand. Verwende das Präteritum.',
   fields:[['Beleg',['Radspur','Foto und Tonspur']],['Hauptsatz',['Der Pokal stand auf dem Wagen','Der Pokal standen auf dem Wagen']],['Bindewort',['nachdem','bevor']],['Nebensatz',['der Becher fiel.','die Tür geöffnet wurde.']]],
   answer:[1,0,1,0],
   hint:'Das Foto zeigt den Pokal zwei Minuten vor dem Klappern auf dem Wagen. Damit widerspricht es Adas Behauptung und stützt Noahs Reihenfolge.'
@@ -156,7 +175,7 @@ const links = [
   title:'Wer oder was bewegte den Wagen?',
   sample:'Noah: «Jemand zog den Wagen weg.» · Ada: «Die Dominosteine stiessen ihn an.»',
   record:'Die Dativspur nennt das Ziel des Stosses. Die Radspur führt von dort hinter den Vorhang.',
-  brief:'Lege den Beleg ab und formuliere die durch ihn gestützte Ursache im Perfekt.',
+  brief:'Vergleiche Noahs und Adas Erklärung für die Bewegung des Wagens mit den Spuren. Lege den Beleg ab und baue aus Hauptsatz, Bindewort und Nebensatz einen Satz im Perfekt, der die belegte Ursache nennt.',
   fields:[['Beleg',['Türprotokoll','Dativspur und Radspur']],['Hauptsatz',['Der Wagen hat losgerollt','Der Wagen ist losgerollt']],['Bindewort',['obwohl','weil']],['Nebensatz',['die Dominosteine ihn angestossen haben.','jemand ihn weggezogen hat.']]],
   answer:[1,1,1,0],
   hint:'Der Stoss traf den Wagen. «Losrollen» bildet das Perfekt mit «sein». «Weil» verbindet die Bewegung mit ihrer belegten Ursache.'

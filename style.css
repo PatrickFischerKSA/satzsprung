@@ -189,3 +189,5 @@ h1{font-size:clamp(2.5rem,7vw,5.6rem);font-weight:400}
 .sequence-bank button:disabled{opacity:.42}
 #deduction details{margin-bottom:10px}
 #deduction summary{cursor:pointer;color:var(--gold)}
+
+#source{white-space:pre-line}

@@ -169,7 +169,7 @@ function render() {
  get('code').textContent = m.clue ? 'SPUR '+(index+1)+' VON '+clues.length : 'AUFGABE '+(index+1);
  get('mission-title').textContent = m.title;
  get('brief').textContent = m.brief;
- get('source').textContent = m.record || m.sample || m.title;
+ get('source').textContent = [m.sample,m.record].filter(Boolean).join('\n\n');
  get('source').hidden = !m.sample;
  get('replay').hidden = station!==0;
  get('replay').onclick = () => playRecording(false);
@@ -207,7 +207,7 @@ function render() {
  } else if (station === 1 || station === 4) {
   const bubble = document.createElement('blockquote');
   bubble.className = 'speech';
-  bubble.textContent = station===1 && index===0 ? '«Der Pokal steht auf dem Wagen.» — Ada' : m.sample;
+  bubble.textContent = m.sample;
   scenery.append(bubble);
  } else if (station === 2 && !m.clue) {
   const tag = document.createElement('div');
@@ -259,8 +259,8 @@ function caption() {
  const m = mission();
  const words = m.fields.map(([,options],i) => options[selected[i]]);
  const display = [
-  () => forms[selected[0]]?.[selected[1]] || 'Wähle Perspektive und Zeitstufe.',
-  () => words[0] ? m.sample + '  →  ' + words[0] : m.sample,
+  () => locked ? forms[selected[0]][selected[1]] : 'Der umgeformte Satz erscheint nach der Prüfung.',
+  () => words[0] || 'Wähle eine Antwort zum Ausgangssatz.',
   () => m.clue ? words[0] || 'Deine Wortgruppe erscheint hier.' : [words[1] === '—' ? '' : words[1],m.stem+(words[2] || '…'),words[3]].filter(Boolean).join(' '),
   () => (places.find(([value]) => value===spot)?.[1] || 'Wähle ein Feld auf der Karte.') + (words[0] && words[1] ? ' · '+words.join(' / ') : '')
 
@@ -293,6 +293,7 @@ function check() {
  solved.add(id());
  try { localStorage.setItem(key,JSON.stringify([...solved])); } catch {}
  nav();
+ if (station===0) caption();
  if (m.spot) get('scene-caption').textContent = m.result;
  feedback('Richtig. '+m.hint+(m.clue ? ' Spur gesichert: '+m.clue : ''),'good');
  get('check').hidden = get('hint').hidden = true;
@@ -445,7 +446,16 @@ dock.addEventListener('drop',event => {
 });
 get('tatort').onclick = () => { showCrimeScene(); searchLens.focus(); };
 get('manual').onclick = () => get('book').showModal();
-get('hint').onclick = () => feedback(mission().hint,'warn');
+get('hint').onclick = () => {
+ const hints = [
+  'Achte auf das Subjekt im Zielsatz. Für die Zeitform prüfe die Verbteile im Ausgangssatz.',
+  'Vergleiche die Verbteile und achte darauf, auf welche Person oder Zeit sich der Auftrag bezieht.',
+  'Bestimme zuerst die Rolle der Wortgruppe im Satz. Prüfe den Kasus bei Bedarf mit einer Ersatzprobe.',
+  'Grenze die gefragte Angabe im Satz ein. Prüfe, ob sie einen Ort, ein Ziel oder einen anderen Zusammenhang bezeichnet.',
+  'Lies die beiden Aussagen getrennt. Prüfe zuerst, welcher Beleg die gefragte Reihenfolge oder Ursache stützt.'
+ ];
+ feedback(hints[station],'warn');
+};
 get('check').onclick = check;
 get('next').onclick = advance;
 document.addEventListener('keydown',event => {
