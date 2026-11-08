@@ -117,3 +117,26 @@ h1{font-size:clamp(2.65rem,6vw,4.75rem);max-width:none;margin-bottom:10px}
  .layout{grid-template-columns:1fr}
  .layout:has(.station-2) #scene{min-height:112px}
 }
+
+/* Tatort am Zürichsee */
+:root{--gold:#ffd493;--muted:#c6d4d1;--line:#536667}
+body{background:radial-gradient(ellipse at 78% 0,#304f52,transparent 65%),#17292c}
+header{border-color:#536667}
+.eyebrow,.hud{letter-spacing:.14em}
+h1{font-size:clamp(2.5rem,7vw,5.6rem);font-weight:400}
+.layout{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:16px}
+.viewport{background:#22383b}
+.hud,#scene-caption{background:#1b3033}
+.console,.casebook{background:#faf3e7;border-color:#e4d6bc;color:#242f2e}
+.console button[aria-pressed=true]{background:#285254;border-color:#285254}
+#crime-scene{position:relative;width:100%}
+#crime-scene>svg{display:block;width:100%;height:auto}
+.clue-marker{position:absolute;translate:-50% -50%;display:grid;place-items:center;width:44px;height:44px;padding:8px;border-radius:50%;border:2px solid #f9e0aa;background:#213e42;color:#fff0cf;box-shadow:0 0 0 4px #17292c70}
+.clue-marker svg{width:22px;fill:none;stroke:currentColor;stroke-width:2.25;stroke-linecap:round}
+.clue-marker[data-secured=true]{background:#e0ecd7;color:#264b42;border-color:#90b6a0}
+#scene:has(#crime-scene:not([hidden])){min-height:0}
+@media(max-width:850px){
+ .layout{grid-template-columns:1fr}
+ .layout:has(#crime-scene:not([hidden])) .console{grid-row:2}
+}
+.header-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}

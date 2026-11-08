@@ -9,11 +9,11 @@
 </head>
 <body>
 <div class="shell">
-<header><a href="./" class="brand">IM FALL DER FÄLLE</a><button id="manual">Spielhilfe</button></header>
+<header><a href="./" class="brand">IM FALL DER FÄLLE</a><div class="header-actions"><button id="tatort">Tatort</button><button id="manual">Spielhilfe</button></div></header>
 <main>
-<div class="eyebrow">BAKER STREET 221B · DER VERSCHWUNDENE POKAL</div>
+<div class="eyebrow">LACHEN SZ · FALL 01</div>
 <h1>Im Fall der <em>Fälle</em></h1>
-<p class="intro">Beim Festessen verschwindet der Pokal. Hinter dem Vorhang klappert es. Ada spricht von Diebstahl. Noah behauptet, er habe bloss die Tür geöffnet.</p>
+<p class="intro">In Lachen gibt es heute wenig zu lachen. Beim Festessen am Hafen verschwindet der Regattapokal. Hinter dem Vorhang hat es geklappert. Ada vermutet einen Diebstahl.</p>
 <ol id="rounds" aria-label="Ablauf des Krimidinners">
 <li>01 · Spurensuche</li><li>02 · Nachtprotokoll</li><li>03 · Abstimmung</li>
 </ol>
@@ -23,6 +23,28 @@
 <div class="hud"><span id="scene-label"></span><span id="counter"></span></div>
 <p id="route-brief" tabindex="-1" hidden></p>
 <div id="scene">
+ <div id="crime-scene" hidden>
+  <svg viewBox="0 0 640 340" aria-hidden="true">
+   <defs><linearGradient id="lake-sky" x2="0" y2="1"><stop stop-color="#f3ce9b"/><stop offset="1" stop-color="#dba178"/></linearGradient><pattern id="floorboards" width="84" height="26" patternUnits="userSpaceOnUse"><path d="M0 25h84M42 0v25" stroke="#816958" opacity=".4"/></pattern></defs>
+   <path fill="#34484c" d="M0 0h640v340H0z"/>
+   <path fill="url(#lake-sky)" d="M45 23h321v147H45z"/>
+   <path fill="#819590" d="m45 111 50-38 41 32 59-50 66 53 47-28 58 29v61H45z"/>
+   <path fill="#527c82" d="M45 119h321v51H45z"/>
+   <path d="M68 134h50m90 15h62m26-16h46" stroke="#adc4b9" stroke-width="2"/>
+   <path d="M156 150h37l-7 5h-24z" fill="#493d39"/><path d="m173 149 4-24 12 24z" fill="#fff1ce"/>
+   <path d="M45 23h321v147H45zM151 23v147m107-147v147" fill="none" stroke="#283538" stroke-width="7"/>
+   <path fill="#bba289" d="M0 202h640v138H0z"/><path fill="url(#floorboards)" d="M0 202h640v138H0z"/>
+   <path fill="#723b48" d="M512 0h128v257H512z"/><path d="M527 0v257m30-257v257m29-257v257m29-257v257" stroke="#9e5966" stroke-width="5"/>
+   <path fill="#583f39" d="M33 184h368v18H33zm16 18h14v103H49zm319 0h14v103h-14z"/>
+   <path fill="#ece0bd" d="M33 187h368v14l-32 25-29-13-30 13-30-13-29 13-30-13-29 13-30-13-29 13-30-13-29 13-41-25z"/>
+   <path d="M75 147l107 34H75z" fill="#a9794e"/><circle cx="91" cy="144" r="13" fill="#d54848" stroke="#f29173" stroke-width="3"/>
+   <path d="M244 146h31l-5 38h-21z" fill="#61a69b" stroke="#376a68" stroke-width="3"/>
+   <g fill="#eaaa6f"><rect x="308" y="157" width="12" height="27" rx="2"/><rect x="329" y="157" width="12" height="27" rx="2"/><rect x="350" y="157" width="12" height="27" rx="2"/></g>
+   <path d="M376 296q92 24 164-26m-160 33q88 22 162-27" fill="none" stroke="#746458" stroke-width="2" stroke-dasharray="5 6"/>
+   <path fill="#547475" d="M409 257h72v25h-72zm63-27h7v33h-7z"/><circle cx="421" cy="285" r="8" fill="#292e32"/><circle cx="469" cy="285" r="8" fill="#292e32"/>
+   <g transform="translate(541 128) rotate(8)"><rect width="57" height="67" rx="3" fill="#f9edcf"/><rect x="6" y="7" width="45" height="44" fill="#766d62"/><path d="M20 17h17q0 15-7 17v5h7v4H20v-4h6v-5q-6-2-6-17z" fill="#ffd777"/></g>
+  </svg>
+ </div>
  <svg id="machine" viewBox="0 0 460 235" role="img" aria-label="Aufbau mit Rampe, Kugel, Becher, Dominosteinen, Wagen und Vorhang.">
   <path d="M25 186H438M48 61l116 69h83" fill="none" stroke="#796758" stroke-width="6" stroke-linecap="round"/>
   <path d="M355 25h77v161h-77z" fill="#673d51"/>
@@ -47,7 +69,7 @@
 </section>
 </div>
 <section class="casebook" aria-labelledby="casebook-title">
-<h2 id="casebook-title">Holmes’ Fallakte</h2>
+<h2 id="casebook-title">Fallakte Lachen</h2>
 <ul id="clues" aria-label="Gesicherte Spuren"></ul>
 <div class="actions"><button id="night" class="primary" hidden>Nachtprotokoll öffnen</button><button id="verdict" class="primary" disabled>Zur Abstimmung</button></div>
 </section>

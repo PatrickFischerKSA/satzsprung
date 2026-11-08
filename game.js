@@ -51,7 +51,10 @@ function nav() {
   tab.disabled = i===4 && !allClues();
   return tab;
  }));
- get('clues').replaceChildren(...clues.map((clue,i) => {
+ const securedOrder = [...solved].filter(value => /^2\/[0-3]$/.test(value)).map(value => Number(value.slice(2)));
+ const clueOrder = [...securedOrder,...clues.map((_,i)=>i).filter(i=>!securedOrder.includes(i))];
+ get('clues').replaceChildren(...clueOrder.map(i => {
+  const clue = clues[i];
   const item = document.createElement('li');
   item.textContent = cases[i]+' · '+(solved.has(clueId(i)) ? clue.clue : 'Spur fehlt');
   return item;
@@ -64,7 +67,7 @@ function nav() {
  get('night').hidden = round !== 1;
  get('verdict').disabled = !canVote();
  get('round-guide').textContent = [
-  'Sichere vier Spuren. Wähle bei jeder Frage den Fall und die passende Wortgruppe.',
+  'Tippe eine Lupe am Tatort an und sichere vier Spuren.',
   'Das Licht geht aus. Öffne das Nachtprotokoll und verbinde die Aussagen zu einem Ablauf.',
   'Das Licht geht wieder an. Legt eure Erklärung zur Abstimmung vor.'
  ][round];
@@ -74,6 +77,39 @@ function nav() {
 function moveToken(x,y) {
  get('token').style.left = x+'%';
  get('token').style.top = y+'%';
+}
+
+function showCrimeScene() {
+ station = 2;
+ index = 0;
+ render();
+ get('mission-title').textContent = 'Untersuche den Tatort';
+ get('brief').textContent = 'Tippe eine Lupe im Bild an. Jede öffnet eine andere Spur mit einer kurzen Grammatikaufgabe.';
+ get('controls').replaceChildren();
+ get('check').hidden = get('hint').hidden = true;
+ get('scene-caption').textContent = 'Festsaal am Hafen · Vier Spuren';
+}
+
+function drawClueMarkers() {
+ const scene = get('crime-scene');
+ scene.querySelectorAll('button').forEach(marker => marker.remove());
+ const targets = [['Kugel',14,42],['Becher',40,48],['Wagen',69,78],['Foto am Vorhang',89,47]];
+ targets.forEach(([name,x,y],i) => {
+  const secured = solved.has(clueId(i));
+  const marker = button('', () => {
+   station = 2;
+   index = i;
+   render();
+   focusMission();
+  },'clue-marker');
+  marker.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/></svg>';
+  marker.setAttribute('aria-label',name+(secured ? ' · Spur gesichert' : ' untersuchen'));
+  marker.title = name;
+  marker.dataset.secured = String(secured);
+  marker.style.left = x+'%';
+  marker.style.top = y+'%';
+  scene.append(marker);
+ });
 }
 
 function render() {
@@ -103,6 +139,8 @@ function render() {
  get('check').hidden = get('hint').hidden = false;
  get('next').hidden = true;
  get('next').textContent = 'Weiter →';
+ get('crime-scene').hidden = !m.clue;
+ if (m.clue) drawClueMarkers();
  const scenery = get('scenery');
  scenery.replaceChildren();
  moveToken(50,50);
@@ -126,10 +164,10 @@ function render() {
   bubble.className = 'speech';
   bubble.textContent = station===1 && index===0 ? '«Der Pokal steht auf dem Wagen.» — Ada' : m.sample;
   scenery.append(bubble);
- } else if (station === 2) {
+ } else if (station === 2 && !m.clue) {
   const tag = document.createElement('div');
-  tag.className = m.clue ? 'speech' : 'evidence';
-  tag.textContent = m.clue ? ['Holmes: «Beginnen wir mit dem Auslöser.»','Watson: «Was geriet als Erstes ins Kippen?»','Holmes: «Folgen wir dem Stoss.»','Watson: «Jetzt fehlt uns die Ladung.»'][index] : 'BEWEISSTÜCK '+String(index+1).padStart(2,'0');
+  tag.className = 'evidence';
+  tag.textContent = 'BEWEISSTÜCK '+String(index+1).padStart(2,'0');
   scenery.append(tag);
  }
  get('controls').replaceChildren(...m.fields.map(([label,options],i) => {
@@ -203,7 +241,10 @@ function check() {
  feedback('Richtig. '+m.hint+(m.clue ? ' Spur gesichert: '+m.clue : ''),'good');
  get('check').hidden = get('hint').hidden = true;
  get('next').hidden = false;
- if (m.clue) get('next').textContent = 'Nächste Spur →';
+ if (m.clue) {
+  drawClueMarkers();
+  get('next').textContent = 'Zurück zum Tatort';
+ }
  if (m.clue && allClues()) get('next').textContent = canVote() ? 'Zur Abstimmung →' : 'Licht aus →';
  if (station===4 && canVote()) get('next').textContent = 'Zur Abstimmung →';
  get('controls').querySelectorAll('button').forEach(item => item.disabled = true);
@@ -212,6 +253,11 @@ function check() {
 }
 
 function advance() {
+ if (get('next').textContent==='Zurück zum Tatort') {
+  showCrimeScene();
+  get('crime-scene').querySelector('[data-secured=false]')?.focus();
+  return;
+ }
  if (get('next').textContent==='Zur Abstimmung →') {
   showCase();
   return;
@@ -300,13 +346,15 @@ dock.addEventListener('drop',event => {
  const [row,column] = payload.split('/').map(Number);
  get('controls').querySelectorAll('fieldset')[row]?.querySelectorAll('button')[column]?.click();
 });
+get('tatort').onclick = () => { showCrimeScene(); get('crime-scene').querySelector('button')?.focus(); };
 get('manual').onclick = () => get('book').showModal();
 get('hint').onclick = () => feedback(mission().hint,'warn');
 get('check').onclick = check;
 get('next').onclick = advance;
 document.addEventListener('keydown',event => {
  if (event.key === 'Enter' && event.target === document.body && !get('book').open) {
-  if (locked) advance(); else check();
+  if (locked) advance(); else if (!get('check').hidden) check();
  }
 });
-openStation(allClues() && !nightComplete() ? 4 : 2);
+if (!allClues()) showCrimeScene();
+else openStation(nightComplete() ? 2 : 4);
