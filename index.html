@@ -4,12 +4,18 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#111820">
 <title>Im Fall der Fälle · Der verschwundene Pokal</title>
-<link rel="stylesheet" href="style.css?v=lupe">
-<script defer src="missions.js"></script><script defer src="game.js?v=lupe"></script>
+<link rel="stylesheet" href="style.css?v=musik">
+<script defer src="missions.js"></script><script defer src="game.js?v=musik"></script>
 </head>
 <body>
 <div class="shell">
 <header><a href="./" class="brand">IM FALL DER FÄLLE</a><div class="header-actions"><button id="tatort">Tatort</button><button id="manual">Spielhilfe</button></div></header>
+<section class="soundtrack" aria-label="Musik">
+<button id="music-start" type="button">Musik starten</button>
+<button id="music-stop" type="button" disabled>Musik stoppen</button>
+<span id="music-status" role="status">Musik aus</span>
+<audio id="music" preload="none"></audio>
+</section>
 <main>
 <div class="eyebrow">LACHEN SZ · FALL 01</div>
 <h1>Im Fall der <em>Fälle</em></h1>

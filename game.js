@@ -396,3 +396,47 @@ document.addEventListener('keydown',event => {
 });
 if (!allClues()) showCrimeScene();
 else openStation(nightComplete() ? 2 : 4);
+
+const tracks = [
+ ['Die 4 Fälle Part III · Rap feat. Nikodem','audio/die-vier-faelle.mp3'],
+ ['Grammatik für Kids · Rap feat. Nikodem','audio/grammatik-fuer-kids.mp3']
+];
+const music = get('music');
+let trackIndex = 0;
+let musicSession = 0;
+
+async function playTrack(session) {
+ const [title,source] = tracks[trackIndex];
+ music.src = source;
+ try {
+  await music.play();
+  if (session===musicSession) get('music-status').textContent = title;
+ } catch {
+  if (session!==musicSession) return;
+  stopMusic();
+  get('music-status').textContent = 'Musik konnte nicht starten.';
+ }
+}
+
+function stopMusic() {
+ musicSession++;
+ music.pause();
+ music.removeAttribute('src');
+ music.load();
+ get('music-start').disabled = false;
+ get('music-stop').disabled = true;
+ get('music-status').textContent = 'Musik aus';
+}
+
+get('music-start').onclick = () => {
+ get('music-start').disabled = true;
+ get('music-stop').disabled = false;
+ trackIndex = 0;
+ playTrack(++musicSession);
+};
+get('music-stop').onclick = stopMusic;
+music.addEventListener('ended', () => {
+ if (get('music-stop').disabled) return;
+ trackIndex = (trackIndex+1)%tracks.length;
+ playTrack(musicSession);
+});

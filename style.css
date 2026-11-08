@@ -170,3 +170,6 @@ h1{font-size:clamp(2.5rem,7vw,5.6rem);font-weight:400}
 #search-instructions,#search-status{margin:0;padding:8px 15px;font-size:.85rem}
 #search-instructions{color:var(--muted)}
 #search-status{color:var(--gold);font-weight:700;min-height:2.2em}
+.soundtrack{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 0}
+.soundtrack button:disabled{opacity:.55}
+#music-status{font-size:.85rem;color:var(--muted)}
